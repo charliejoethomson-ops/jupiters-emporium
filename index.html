@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jupiter's Emporium - Nostalgic Web Atelier</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            retroBlack: '#0a0a0c',
+            retroDark: '#121216',
+            neonPink: '#ff007f',
+            mysticGold: '#cca41a', // Deepened mystical gold-yellow
+            forestGreen: '#1b4d3e', // Deep mystical forest green
+          },
+          fontFamily: {
+            mono: ['"Courier Prime"', 'monospace'],
+            sans: ['Montserrat', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #0a0a0c;
+      font-family: 'Montserrat', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Whimsical Nostalgia Glows */
+    .glow-pink-text {
+      color: #ff007f;
+      text-shadow: 0 0 6px rgba(255, 0, 127, 0.7), 0 0 15px rgba(255, 0, 127, 0.3);
+    }
+
+    .glow-gold-text {
+      color: #cca41a;
+      text-shadow: 0 0 6px rgba(204, 164, 26, 0.7), 0 0 12px rgba(204, 164, 26, 0.3);
+    }
+
+    /* Double dashed borders mimicking early custom profile templates */
+    .retro-dashed-pink {
+      border: 2px dashed #ff007f;
+      box-shadow: 0 0 8px rgba(255, 0, 127, 0.3);
+    }
+
+    .retro-dashed-gold {
+      border: 2px dashed #cca41a;
+      box-shadow: 0 0 8px rgba(204, 164, 26, 0.3);
+    }
+
+    /* Custom scrollbar matching retro colors */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0a0a0c;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #ff007f;
+      border: 2px solid #0a0a0c;
+      border-radius: 4px;
+    }
+
+    /* Magic canvas overlay */
+    #magic-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      opacity: 0.3;
+      pointer-events: auto; /* Enable hover triggers for Wind Chimes */
+    }
+
+    /* Nostalgic tiling starry grid */
+    .retro-grid-pattern {
+      background-image: linear-gradient(to right, rgba(255, 0, 127, 0.03) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(255, 0, 127, 0.03) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+
+    /* Blink animation classic to early web */
+    .retro-blink {
+      animation: blinker 1.5s linear infinite;
+    }
+    @keyframes blinker {
+      50% { opacity: 0; }
+    }
+    
+    /* Simple visualizer animation lines */
+    .viz-bar {
+      width: 3px;
+      height: 4px;
+      background-color: #ff007f;
+      transition: height 0.1s ease-in-out;
+    }
+  </style>
+</head>
+<body class="text-gray-200 retro-grid-pattern min-h-screen relative selection:bg-neonPink selection:text-white pb-12">
+
+  <!-- Magic Twinkling Retro Star Canvas -->
+  <canvas id="magic-canvas"></canvas>
+
+  <!-- Main Container -->
+  <div class="relative z-10 flex flex-col min-h-screen max-w-7xl mx-auto px-4 md:px-8 py-6">
+    
+    <!-- MSN Messenger Style Status Header -->
+    <div class="border-2 border-mysticGold bg-retroDark/95 p-4 rounded mb-8 glow-gold-border flex flex-col lg:flex-row justify-between items-center gap-4">
+      <div class="flex items-center gap-4 w-full lg:w-auto">
+        <!-- Retro MSN Avatar frame -->
+        <div onclick="playCrestFreq()" class="w-14 h-14 border-2 border-neonPink flex items-center justify-center rounded bg-white overflow-hidden cursor-pointer hover:scale-105 transition-transform relative group">
+          <span class="absolute -top-1 -right-1 text-xs animate-bounce z-20">✨</span>
+          
+          <!-- Logo Image Source -->
+          <img src="Screenshot_20260530-134321.png" alt="Jupiter Logo" class="object-cover w-full h-full relative z-10" onerror="this.style.display='none'; document.getElementById('header-avatar-fallback').classList.remove('hidden');">
+          <!-- Fallback -->
+          <div id="header-avatar-fallback" class="hidden absolute inset-0 bg-retroBlack flex items-center justify-center text-xl group-hover:animate-spin">🪐</div>
+        </div>
+        <div class="font-mono text-xs">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 bg-forestGreen rounded-full inline-block border border-white animate-pulse"></span>
+            <span class="text-white font-bold text-sm">Jayme // Jupiter's Emporium</span>
+          </div>
+          <div class="text-neonPink mt-1 glow-pink-text">
+            "~*~ Blessed Be ~*~ Status: <span id="current-track-name" class="underline">Jukebox Offline</span>"
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation & Whimsical Audio Jukebox Control Block -->
+      <div class="flex flex-col md:flex-row items-center gap-4 w-full lg:w-auto justify-end">
+        
+        <!-- COSMIC JUKEBOX CONSOLE -->
+        <div class="flex flex-col gap-1.5 bg-retroBlack border border-mysticGold/40 p-2.5 rounded text-[10px] font-mono w-full md:w-auto">
+          <div class="flex justify-between items-center border-b border-mysticGold/15 pb-1">
+            <span class="text-mysticGold font-bold">🔮 COSMIC_JUKEBOX_v1.0</span>
+            <!-- Retro ASCII visualizer -->
+            <div id="visualizer-box" class="flex gap-0.5 items-end h-3 px-1">
+              <div class="viz-bar"></div>
+              <div class="viz-bar"></div>
+              <div class="viz-bar"></div>
+              <div class="viz-bar"></div>
+            </div>
+          </div>
+          
+          <div class="flex flex-wrap gap-1.5 mt-1 items-center">
+            <button onclick="playTrack('hum')" id="btn-track-hum" class="track-btn px-2 py-1 border border-mysticGold/30 text-mysticGold rounded hover:border-neonPink hover:text-neonPink transition-colors">
+              [ Drone ]
+            </button>
+            <button onclick="playTrack('pink')" id="btn-track-pink" class="track-btn px-2 py-1 border border-mysticGold/30 text-mysticGold rounded hover:border-neonPink hover:text-neonPink transition-colors">
+              [ Pink Noise ]
+            </button>
+            <button onclick="playTrack('lullaby')" id="btn-track-lullaby" class="track-btn px-2 py-1 border border-mysticGold/30 text-mysticGold rounded hover:border-neonPink hover:text-neonPink transition-colors">
+              [ Astral Synth ]
+            </button>
+            <button onclick="stopJukebox()" id="btn-track-stop" class="px-2 py-1 border border-red-500/50 text-red-400 rounded hover:bg-red-500/15 transition-colors">
+              MUTE 🔇
+            </button>
+          </div>
+
+          <div class="flex items-center gap-2 justify-between mt-1 text-[9px] text-gray-500">
+            <span>VOLUME:</span>
+            <input type="range" id="audio-volume" min="0" max="0.3" step="0.01" value="0.06" oninput="adjustVolume(this.value)" class="w-20 accent-neonPink bg-retroDark cursor-pointer">
+          </div>
+        </div>
+
+        <nav class="flex flex-wrap gap-2 font-mono text-xs">
+          <button onclick="switchTab('terminal')" id="nav-terminal" class="nav-btn px-3 py-1.5 border-2 border-neonPink text-neonPink bg-retroBlack rounded transition-all">
+            [ ABOUT_ME ]
+          </button>
+          <button onclick="switchTab('studio')" id="nav-studio" class="nav-btn px-3 py-1.5 border border-mysticGold/40 text-mysticGold bg-retroBlack rounded transition-all">
+            [ THE_STUDIO ]
+          </button>
+          <button onclick="switchTab('shop')" id="nav-shop" class="nav-btn px-3 py-1.5 border border-mysticGold/40 text-mysticGold bg-retroBlack rounded transition-all">
+            [ THE_VAULT ]
+          </button>
+          <button onclick="switchTab('coordinates')" id="nav-coordinates" class="nav-btn px-3 py-1.5 border border-mysticGold/40 text-mysticGold bg-retroBlack rounded transition-all">
+            [ SIGN_GUESTBOOK ]
+          </button>
+        </nav>
+      </div>
+    </div>
+
+    <!-- MAIN DISPLAY TERMINAL -->
+    <main class="flex-grow grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- LEFT MODULE: The Workspace Window (8 Columns) -->
+      <section class="lg:col-span-8 flex flex-col gap-8">
+        
+        <!-- TAB 01_ABOUT_ME (MSN Profile & Space Bio) -->
+        <div id="tab-terminal" class="tab-pane bg-retroDark/95 rounded relative overflow-hidden">
+          <!-- MSN style window title bar -->
+          <div class="bg-gradient-to-r from-neonPink to-retroBlack px-4 py-2 flex justify-between items-center text-xs font-mono border-b border-mysticGold/30">
+            <span class="font-bold text-white flex items-center gap-1">🔮 JUPITER_PROFILE.EXE</span>
+            <div class="flex gap-1.5">
+              <span class="w-3 h-3 bg-mysticGold/20 rounded-full border border-mysticGold flex items-center justify-center text-[8px] cursor-pointer">_</span>
+              <span class="w-3 h-3 bg-mysticGold/20 rounded-full border border-mysticGold flex items-center justify-center text-[8px] cursor-pointer">□</span>
+              <span class="w-3 h-3 bg-neonPink/20 rounded-full border border-neonPink flex items-center justify-center text-[8px] cursor-pointer">X</span>
+            </div>
+          </div>
+
+          <div class="p-6 space-y-6 font-mono text-xs leading-relaxed">
+            <div class="flex flex-col sm:flex-row gap-6 border-b border-mysticGold/20 pb-6">
+              <!-- Retro Profile Photo Sticker Box (Polaroid design) -->
+              <div class="w-24 h-24 bg-white p-1 rounded-sm shadow-md flex-shrink-0 flex items-center justify-center relative overflow-hidden group hover:rotate-3 transition-transform">
+                <img src="Screenshot_20260530-134321.png" alt="Jayme Polaroid Logo" class="object-contain w-full h-full relative z-10" onerror="this.style.display='none'; document.getElementById('polaroid-avatar-fallback').classList.remove('hidden');">
+                <!-- Fallback -->
+                <div id="polaroid-avatar-fallback" class="hidden absolute inset-0 bg-retroBlack flex flex-col items-center justify-center text-3xl">🧙‍♀️</div>
+                
+                <div class="absolute -bottom-1 -right-1 bg-neonPink text-white text-[8px] px-1 font-mono rounded z-20">LVL.99</div>
+              </div>
+              <div class="space-y-2">
+                <h3 class="text-sm font-bold text-mysticGold flex items-center gap-2">
+                  <span>✨ Welcome to Jayme's Alchemical Vault! ✨</span>
+                </h3>
+                <p class="text-gray-400 text-[11px]">
+                  "Mixing Nepalese handlooms with glowing custom crochet stitches, direct high-altitude Himalayan incense, and vibrant crystal nodes. Glastonbury aligned."
+                </p>
+                <div class="flex flex-wrap gap-2 pt-1 text-[10px]">
+                  <span class="bg-neonPink/10 text-neonPink border border-neonPink/30 px-2 py-0.5 rounded">#Web1.0</span>
+                  <span class="bg-mysticGold/10 text-mysticGold border border-mysticGold/30 px-2 py-0.5 rounded">#CyberWitch</span>
+                  <span class="bg-forestGreen/15 text-forestGreen border border-forestGreen/30 px-2 py-0.5 rounded font-bold">#RetroNostalgia</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- MySpace Style Top Friends/Influences Grid -->
+            <div class="space-y-3">
+              <h4 class="text-xs text-neonPink uppercase font-bold tracking-wider">// JAYME'S PLANETARY ANCHORS (TOP FRIENDS)</h4>
+              <div class="grid grid-cols-4 gap-2">
+                <div class="bg-retroBlack border border-mysticGold/20 p-2 rounded text-center group hover:border-neonPink transition-colors">
+                  <div class="text-xl mb-1">🪐</div>
+                  <div class="text-[9px] text-gray-400 truncate font-mono">Jupiter</div>
+                </div>
+                <div class="bg-retroBlack border border-mysticGold/20 p-2 rounded text-center group hover:border-neonPink transition-colors">
+                  <div class="text-xl mb-1">🌙</div>
+                  <div class="text-[9px] text-gray-400 truncate font-mono">The Moon</div>
+                </div>
+                <div class="bg-retroBlack border border-mysticGold/20 p-2 rounded text-center group hover:border-neonPink transition-colors">
+                  <div class="text-xl mb-1">🧶</div>
+                  <div class="text-[9px] text-gray-400 truncate font-mono">Glastonbury</div>
+                </div>
+                <div class="bg-retroBlack border border-mysticGold/20 p-2 rounded text-center group hover:border-neonPink transition-colors">
+                  <div class="text-xl mb-1">🏔</div>
+                  <div class="text-[9px] text-gray-400 truncate font-mono">Kathmandu</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+
+        <!-- TAB 02_VIRTUAL_STUDIO (Interactive Dressing Lookbook) -->
+        <div id="tab-studio" class="tab-pane hidden bg-retroDark/95 rounded relative overflow-hidden">
+          <!-- Window title bar -->
+          <div class="bg-gradient-to-r from-neonPink to-retroBlack px-4 py-2 flex justify-between items-center text-xs font-mono border-b border-mysticGold/30">
+            <span class="font-bold text-white flex items-center gap-1">✨ LOOKBOOK_STUDIO.EXE</span>
+            <div class="flex gap-1.5">
+              <span class="w-3 h-3 bg-mysticGold/20 rounded-full border border-mysticGold flex items-center justify-center text-[8px]">_</span>
+              <span class="w-3 h-3 bg-mysticGold/20 rounded-full border border-mysticGold flex items-center justify-center text-[8px]">□</span>
+              <span class="w-3 h-3 bg-neonPink/20 rounded-full border border-neonPink flex items-center justify-center text-[8px]">X</span>
+            </div>
+          </div>
+
+          <div class="p-6 flex flex-col md:flex-row gap-6">
+            
+            <!-- Fitting Room Display (SVG Model Base Layer) -->
+            <div class="w-full md:w-1/2 flex flex-col items-center">
+              <div id="studio-backdrop" class="relative w-full aspect-[4/5] bg-retroBlack retro-dashed-pink rounded overflow-hidden flex items-center justify-center">
+                <!-- Retro Grid Lines and Decals -->
+                <span class="absolute top-2 left-3 text-[9px] font-mono text-neonPink/60 tracking-widest">COSMIC GRID COORDINATES</span>
+                <span id="active-model-id" class="absolute bottom-2 right-3 text-[9px] font-mono text-mysticGold">MODEL: ARIA_01</span>
+                
+                <!-- Dynamic SVG Vector Model Canvas -->
+                <svg id="svg-model-container" class="w-full h-full max-h-[420px] p-4 relative z-10" viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <!-- Starry Guideline Accents inside Silhouette -->
+                  <circle cx="50" cy="60" r="45" stroke="rgba(212,175,55,0.08)" stroke-width="0.5" />
+                  <line x1="50" y1="0" x2="50" y2="120" stroke="rgba(212,175,55,0.1)" stroke-dasharray="2 2" />
+
+                  <!-- ARIA SILHOUETTE (Model 1) -->
+                  <g id="model-aria-body">
+                    <circle cx="50" cy="20" r="7.5" fill="#cca41a" fill-opacity="0.25" stroke="#cca41a" stroke-width="0.75" />
+                    <rect x="48.5" y="27.5" width="3" height="6" fill="#cca41a" fill-opacity="0.25" stroke="#cca41a" stroke-width="0.75" />
+                    <path d="M39 37 C39 37, 43 65, 45 72 L55 72 C57 65, 61 37, 61 37 Z" fill="#cca41a" fill-opacity="0.2" stroke="#cca41a" stroke-width="0.75" />
+                    <line x1="45" y1="72" x2="42" y2="112" stroke="#cca41a" stroke-width="1.2" stroke-linecap="round" stroke-opacity="0.5" />
+                    <line x1="55" y1="72" x2="58" y2="112" stroke="#cca41a" stroke-width="1.2" stroke-linecap="round" stroke-opacity="0.5" />
+                    <path d="M39 37 L29 62" stroke="#cca41a" stroke-width="1" stroke-linecap="round" stroke-opacity="0.4" />
+                    <path d="M61 37 L71 62" stroke="#cca41a" stroke-width="1" stroke-linecap="round" stroke-opacity="0.4" />
+                  </g>
+
+                  <!-- ROWAN SILHOUETTE (Model 2) -->
+                  <g id="model-rowan-body" class="hidden">
+                    <circle cx="50" cy="19" r="8" fill="#ff007f" fill-opacity="0.25" stroke="#ff007f" stroke-width="0.75" />
+                    <rect x="48" y="27" width="4" height="6.5" fill="#ff007f" fill-opacity="0.25" stroke="#ff007f" stroke-width="0.75" />
+                    <path d="M37 36 C37 36, 42 66, 44 73 L56 73 C58 66, 63 36, 63 36 Z" fill="#ff007f" fill-opacity="0.2" stroke="#ff007f" stroke-width="0.75" />
+                    <line x1="44" y1="73" x2="45" y2="113" stroke="#ff007f" stroke-width="1.3" stroke-linecap="round" stroke-opacity="0.5" />
+                    <line x1="56" y1="73" x2="55" y2="113" stroke="#ff007f" stroke-width="1.3" stroke-linecap="round" stroke-opacity="0.5" />
+                    <path d="M37 36 L27 60" stroke="#ff007f" stroke-width="1.1" stroke-linecap="round" stroke-opacity="0.4" />
+                    <path d="M63 36 L70 54 L66 70" stroke="#ff007f" stroke-width="1.1" stroke-linecap="round" stroke-opacity="0.4" fill="none" />
+                  </g>
+
+                  <!-- CLOTHING LAYERS -->
+                  
+                  <!-- Crop Top Layer -->
+                  <g id="svg-crop-top" class="hidden">
+                    <path d="M37.5 37.5 C37.5 37.5, 39.5 54.5, 43.5 54.5 L56.5 54.5 C60.5 54.5, 62.5 37.5, 62.5 37.5 L53.5 35.5 L46.5 35.5 Z" fill="#ff007f" fill-opacity="0.85" stroke="#ffffff" stroke-width="0.75" />
+                    <circle cx="50" cy="45" r="2.5" stroke="#cca41a" stroke-width="0.5" fill="none" />
+                    <line x1="43.5" y1="46" x2="56.5" y2="46" stroke="#ffffff" stroke-dasharray="1 1" stroke-width="0.5" />
+                  </g>
+
+                  <!-- Knit Shrug Layer -->
+                  <g id="svg-knit-shrug" class="hidden">
+                    <path d="M29 37 L38 34.5 L50 37.5 L62 34.5 L71 37 L73 44 L63 42 L58 44.5 L42 44.5 L37 42 L27 44 Z" fill="#ff007f" fill-opacity="0.7" stroke="#ff007f" stroke-width="1" />
+                    <path d="M27 44 L19 61 L23 63 L31 44 Z" fill="#ff007f" fill-opacity="0.85" stroke="#ffffff" stroke-width="0.5" />
+                    <path d="M71 44 L79 61 L75 63 L67 44 Z" fill="#ff007f" fill-opacity="0.85" stroke="#ffffff" stroke-width="0.5" />
+                  </g>
+
+                  <!-- Harem Pants Layer -->
+                  <g id="svg-harem-pants" class="hidden">
+                    <path d="M43.5 71 L56.5 71 L63 81 L59 107 L50 91 L41 107 L37 81 Z" fill="#cca41a" fill-opacity="0.8" stroke="#ff007f" stroke-width="1" />
+                    <path d="M45.5 75 Q50 85 54.5 75" stroke="#050505" stroke-width="0.75" fill="none" />
+                    <path d="M41.5 81 Q50 94 58.5 81" stroke="#050505" stroke-width="0.75" fill="none" />
+                  </g>
+
+                  <!-- Patchwork Skirt Layer -->
+                  <g id="svg-patchwork-skirt" class="hidden">
+                    <path d="M43.5 71 L56.5 71 L67 104 L33 104 Z" fill="#ff007f" fill-opacity="0.6" stroke="#cca41a" stroke-width="1" />
+                    <rect x="41" y="78" width="8" height="8" fill="#cca41a" fill-opacity="0.4" stroke="#cca41a" stroke-width="0.5" />
+                    <circle cx="53" cy="88" r="4.5" fill="#050505" stroke="#ff007f" stroke-width="0.5" />
+                  </g>
+
+                  <!-- Crystal Talisman Layer -->
+                  <g id="svg-crystal-talisman" class="hidden">
+                    <path d="M44.5 27.5 Q50 37.5 55.5 27.5" stroke="#cca41a" stroke-width="0.75" fill="none" />
+                    <polygon points="50,37.5 48,42 50,46.5 52,42" fill="#ff007f" stroke="#ffffff" stroke-width="0.5" />
+                  </g>
+
+                  <!-- Hooded Void Cloak Layer -->
+                  <g id="svg-void-cloak" class="hidden">
+                    <path d="M34 32 C34 32, 22 75, 18 114 L36 114 L50 85 L64 114 L82 114 C78 75, 66 32, 66 32 Z" fill="#121216" fill-opacity="0.95" stroke="#cca41a" stroke-width="1" />
+                    <path d="M38 31 C38 18, 62 18, 62 31 L58 35 L42 35 Z" fill="#202026" stroke="#ff007f" stroke-width="0.75" />
+                  </g>
+                </svg>
+              </div>
+
+              <!-- Live Outfit Valuation Output -->
+              <div class="mt-4 w-full bg-retroBlack border border-mysticGold/30 p-3 rounded flex justify-between items-center text-xs font-mono">
+                <span class="text-gray-400">Total Price:</span>
+                <span id="studio-valuation-badge" class="text-mysticGold font-bold text-base glow-gold-text">$0.00</span>
+              </div>
+            </div>
+
+            <!-- Wardrobe Options Sidebar -->
+            <div class="w-full md:w-1/2 flex flex-col justify-between font-mono text-[11px]">
+              <div>
+                <!-- Model Selector buttons with whimsical profiles -->
+                <div class="mb-5">
+                  <h4 class="text-gray-400 uppercase tracking-wider mb-2">// CHOOSE YOUR AVATAR PROFILE</h4>
+                  <div class="grid grid-cols-2 gap-2">
+                    <button onclick="selectModel('aria')" id="model-select-aria" class="px-3 py-2 border-2 border-neonPink text-neonPink bg-retroBlack rounded transition-all">
+                      ARIA_01 (Celestial)
+                    </button>
+                    <button onclick="selectModel('rowan')" id="model-select-rowan" class="px-3 py-2 border border-mysticGold/30 text-mysticGold bg-retroBlack rounded transition-all">
+                      ROWAN_02 (Cosmic)
+                    </button>
+                  </div>
+                </div>
+
+                <h3 class="text-neonPink uppercase tracking-wider mb-3">✦ EQUIPPABLE ARTIFACTS ✦</h3>
+                
+                <div class="space-y-3">
+                  <!-- Tops Category -->
+                  <div>
+                    <h4 class="text-gray-500 uppercase tracking-widest mb-1.5 font-bold">01_TOPS</h4>
+                    <div class="grid grid-cols-2 gap-2">
+                      <button onclick="toggleWearable('top', 'crop-top', 48.00)" id="btn-crop-top" class="wearable-btn text-left p-2 border border-mysticGold/25 bg-retroBlack rounded hover:border-neonPink transition-all flex flex-col justify-between h-14">
+                        <span class="font-bold text-gray-300">Crochet Crop Tank</span>
+                        <span class="text-mysticGold">$48.00</span>
+                      </button>
+                      <button onclick="toggleWearable('top', 'knit-shrug', 65.00)" id="btn-knit-shrug" class="wearable-btn text-left p-2 border border-mysticGold/25 bg-retroBlack rounded hover:border-neonPink transition-all flex flex-col justify-between h-14">
+                        <span class="font-bold text-gray-300">Nebula Shrug</span>
+                        <span class="text-mysticGold">$65.00</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Bottoms Category -->
+                  <div>
+                    <h4 class="text-gray-500 uppercase tracking-widest mb-1.5 font-bold">02_BOTTOMS</h4>
+                    <div class="grid grid-cols-2 gap-2">
+                      <button onclick="toggleWearable('bottom', 'harem-pants', 55.00)" id="btn-harem-pants" class="wearable-btn text-left p-2 border border-mysticGold/25 bg-retroBlack rounded hover:border-neonPink transition-all flex flex-col justify-between h-14">
+                        <span class="font-bold text-gray-300">Kathmandu Harem</span>
+                        <span class="text-mysticGold">$55.00</span>
+                      </button>
+                      <button onclick="toggleWearable('bottom', 'patchwork-skirt', 70.00)" id="btn-patchwork-skirt" class="wearable-btn text-left p-2 border border-mysticGold/25 bg-retroBlack rounded hover:border-neonPink transition-all flex flex-col justify-between h-14">
+                        <span class="font-bold text-gray-300">Patchwork Skirt</span>
+                        <span class="text-mysticGold">$70.00</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Outerwear Category -->
+                  <div>
+                    <h4 class="text-gray-500 uppercase tracking-widest mb-1.5 font-bold">03_OUTERWEAR</h4>
+                    <button onclick="toggleWearable('cloak', 'void-cloak', 110.00)" id="btn-void-cloak" class="wearable-btn w-full text-left p-2 border border-mysticGold/25 bg-retroBlack rounded hover:border-neonPink transition-all flex justify-between items-center h-10">
+                      <span class="font-bold text-gray-300">Hooded Void Cloak (Heavy Wool)</span>
+                      <span class="text-mysticGold">$110.00</span>
+                    </button>
+                  </div>
+
+                  <!-- Accessories Category -->
+                  <div>
+                    <h4 class="text-gray-500 uppercase tracking-widest mb-1.5 font-bold">04_TALISMANS</h4>
+                    <button onclick="toggleWearable('accessory', 'crystal-talisman', 28.00)" id="btn-crystal-talisman" class="wearable-btn w-full text-left p-2 border border-mysticGold/25 bg-retroBlack rounded hover:border-neonPink transition-all flex justify-between items-center h-10">
+                      <span class="font-bold text-gray-300">Amethyst Point Pendant</span>
+                      <span class="text-mysticGold">$28.00</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Checkout action button -->
+              <div class="mt-5">
+                <button onclick="addOutfitToCart()" class="w-full bg-neonPink hover:bg-neonPink/80 text-white font-bold p-3 rounded uppercase tracking-widest transition-all shadow-[0_0_12px_rgba(255,0,127,0.4)]">
+                  Add This Look to Cart
+                </button>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+
+        <!-- TAB 03_THE_VAULT (Expanded E-Commerce Grid) -->
+        <div id="tab-shop" class="tab-pane hidden bg-retroDark/95 rounded relative overflow-hidden">
+          <!-- Window title bar -->
+          <div class="bg-gradient-to-r from-neonPink to-retroBlack px-4 py-2 flex justify-between items-center text-xs font-mono border-b border-mysticGold/30">
+            <span class="font-bold text-white flex items-center gap-1">👜 ALCHEMIST_SHOP.EXE</span>
+            <div class="flex gap-1.5">
+              <span class="w-3 h-3 bg-mysticGold/20 rounded-full border border-mysticGold flex items-center justify-center text-[8px]">_</span>
+              <span class="w-3 h-3 bg-mysticGold/20 rounded-full border border-mysticGold flex items-center justify-center text-[8px]">□</span>
+              <span class="w-3 h-3 bg-neonPink/20 rounded-full border border-neonPink flex items-center justify-center text-[8px]">X</span>
+            </div>
+          </div>
+
+          <div class="p-6">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-mysticGold/20 pb-4 mb-4 font-mono text-xs">
+              <h2 class="text-mysticGold font-bold text-sm tracking-wider">// ARCHIVED VAULT INDEX</h2>
+              
+              <!-- Filter Selectors -->
+              <div class="flex flex-wrap gap-1">
+                <button onclick="filterVault('all')" id="filter-all" class="filter-btn px-2 py-0.5 border border-neonPink text-neonPink rounded bg-retroBlack transition-all">ALL</button>
+                <button onclick="filterVault('crochet')" id="filter-crochet" class="filter-btn px-2 py-0.5 border border-mysticGold/30 text-mysticGold rounded hover:border-neonPink transition-all">CROCHET</button>
+                <button onclick="filterVault('crystals')" id="filter-crystals" class="filter-btn px-2 py-0.5 border border-mysticGold/30 text-mysticGold rounded hover:border-neonPink transition-all">CRYSTALS</button>
+                <button onclick="filterVault('nepalese')" id="filter-nepalese" class="filter-btn px-2 py-0.5 border border-mysticGold/30 text-mysticGold rounded hover:border-neonPink transition-all">NEPALESE</button>
+              </div>
+            </div>
+
+            <!-- Dynamic Search -->
+            <div class="mb-4 relative font-mono text-xs">
+              <input type="text" id="vault-search" placeholder="Search product file catalog..." oninput="searchVault(this.value)" class="w-full bg-retroBlack border border-mysticGold/30 rounded p-2 pl-8 text-white outline-none focus:border-neonPink transition-colors">
+              <div class="absolute left-2.5 top-2.5">🔍</div>
+            </div>
+
+            <!-- Vault Cards -->
+            <div id="vault-items-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4 font-mono text-xs">
+              
+              <!-- Card 1 -->
+              <div class="vault-card border border-mysticGold/30 bg-retroBlack p-3 rounded flex flex-col justify-between hover:border-neonPink transition-colors" data-category="nepalese" data-name="himalayan cedarwood incense">
+                <div class="flex justify-between items-start mb-2">
+                  <div>
+                    <span class="text-[8px] text-neonPink block uppercase">INCENSE // RES01</span>
+                    <h3 class="font-bold text-white text-xs mt-0.5">Himalayan Cedarwood Incense</h3>
+                  </div>
+                  <span class="text-mysticGold font-bold">$18.00</span>
+                </div>
+                <p class="text-[10px] text-gray-400 mb-3">Piney ritual incense rolled responsibly in the valleys of Nepal.</p>
+                <div class="flex gap-1">
+                  <button onclick="addToCart('Himalayan Cedarwood Incense', 18.00)" class="flex-grow bg-retroDark border border-mysticGold/30 text-mysticGold hover:border-neonPink hover:text-neonPink py-1 text-[10px] transition-colors">
+                    Acquire Item_
+                  </button>
+                  <button onclick="openInspectModal('ins01')" class="px-2 border border-mysticGold/10 text-gray-500 hover:text-mysticGold">[ INSPECT ]</button>
+                </div>
+              </div>
+
+              <!-- Card 2 -->
+              <div class="vault-card border border-mysticGold/30 bg-retroBlack p-3 rounded flex flex-col justify-between hover:border-neonPink transition-colors" data-category="crystals" data-name="raw citrine cluster">
+                <div class="flex justify-between items-start mb-2">
+                  <div>
+                    <span class="text-[8px] text-neonPink block uppercase">CRYSTALS // CITR9</span>
+                    <h3 class="font-bold text-white text-xs mt-0.5">Raw Citrine Cluster</h3>
+                  </div>
+                  <span class="text-mysticGold font-bold">$32.00</span>
+                </div>
+                <p class="text-[10px] text-gray-400 mb-3">Uncut energetic amplifier aligned with abundance currents.</p>
+                <div class="flex gap-1">
+                  <button onclick="addToCart('Raw Citrine Cluster', 32.00)" class="flex-grow bg-retroDark border border-mysticGold/30 text-mysticGold hover:border-neonPink hover:text-neonPink py-1 text-[10px] transition-colors">
+                    Acquire Item_
+                  </button>
+                  <button onclick="openInspectModal('cr09')" class="px-2 border border-mysticGold/10 text-gray-500 hover:text-mysticGold">[ INSPECT ]</button>
+                </div>
+              </div>
+
+              <!-- Card 3 -->
+              <div class="vault-card border border-mysticGold/30 bg-retroBlack p-3 rounded flex flex-col justify-between hover:border-neonPink transition-colors" data-category="crystals" data-name="black obsidian scrying mirror">
+                <div class="flex justify-between items-start mb-2">
+                  <div>
+                    <span class="text-[8px] text-neonPink block uppercase">ALCHEMIC // MIR04</span>
+                    <h3 class="font-bold text-white text-xs mt-0.5">Black Obsidian Scrying Mirror</h3>
+                  </div>
+                  <span class="text-mysticGold font-bold">$45.00</span>
+                </div>
+                <p class="text-[10px] text-gray-400 mb-3">Highly polished dark glass designed for meditation and shadow-work.</p>
+                <div class="flex gap-1">
+                  <button onclick="addToCart('Black Obsidian Mirror', 45.00)" class="flex-grow bg-retroDark border border-mysticGold/30 text-mysticGold hover:border-neonPink hover:text-neonPink py-1 text-[10px] transition-colors">
+                    Acquire Item_
+                  </button>
+                  <button onclick="openInspectModal('bo04')" class="px-2 border border-mysticGold/10 text-gray-500 hover:text-mysticGold">[ INSPECT ]</button>
+                </div>
+              </div>
+
+              <!-- Card 4 -->
+              <div class="vault-card border border-mysticGold/30 bg-retroBlack p-3 rounded flex flex-col justify-between hover:border-neonPink transition-colors" data-category="crochet" data-name="amethyst knit wrap shrug">
+                <div class="flex justify-between items-start mb-2">
+                  <div>
+                    <span class="text-[8px] text-neonPink block uppercase">CROCHET // CC02</span>
+                    <h3 class="font-bold text-white text-xs mt-0.5">Amethyst Knit Wrap Shrug</h3>
+                  </div>
+                  <span class="text-mysticGold font-bold">$78.00</span>
+                </div>
+                <p class="text-[10px] text-gray-400 mb-3">Custom crochet knitwear pieces with real amethyst stones sewn in.</p>
+                <div class="flex gap-1">
+                  <button onclick="addToCart('Amethyst Knit Wrap Shrug', 78.00)" class="flex-grow bg-retroDark border border-mysticGold/30 text-mysticGold hover:border-neonPink hover:text-neonPink py-1 text-[10px] transition-colors">
+                    Acquire Item_
+                  </button>
+                  <button onclick="openInspectModal('cc02')" class="px-2 border border-mysticGold/10 text-gray-500 hover:text-mysticGold">[ INSPECT ]</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+
+        <!-- TAB 04_COORDINATES (Contact / Guestbook Window) -->
+        <div id="tab-coordinates" class="tab-pane hidden bg-retroDark/95 rounded relative overflow-hidden">
+          <div class="bg-gradient-to-r from-neonPink to-retroBlack px-4 py-2 flex justify-between items-center text-xs font-mono border-b border-mysticGold/30">
+            <span class="font-bold text-white flex items-center gap-1">📖 CELESTIAL_GUESTBOOK.EXE</span>
+            <div class="flex gap-1.5">
+              <span class="w-3 h-3 bg-mysticGold/20 rounded-full border border-mysticGold flex items-center justify-center text-[8px]">_</span>
+              <span class="w-3 h-3 bg-mysticGold/20 rounded-full border border-mysticGold flex items-center justify-center text-[8px]">□</span>
+              <span class="w-3 h-3 bg-neonPink/20 rounded-full border border-neonPink flex items-center justify-center text-[8px]">X</span>
+            </div>
+          </div>
+
+          <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6 font-mono text-xs">
+            <div class="space-y-4 leading-relaxed">
+              <h3 class="text-neonPink font-bold uppercase tracking-wider">// DESIGN PATHWAY SPECIFICATIONS</h3>
+              <p class="text-gray-400 text-[11px]">
+                Have questions about custom crochet dimensions, incense ingredients, or crystal selection? Sign the guestbook coordinates using our alchemical runes.
+              </p>
+              
+              <div class="border border-mysticGold/25 p-3 rounded bg-retroBlack space-y-1.5 text-[10px]">
+                <div class="flex justify-between"><span class="text-gray-500">ORIGIN:</span><span class="text-white">Kathmandu / Glastonbury</span></div>
+                <div class="flex justify-between"><span class="text-gray-500">COORDINATE_LAT:</span><span class="text-white">51.1479° N</span></div>
+                <div class="flex justify-between"><span class="text-gray-500">COORDINATE_LON:</span><span class="text-white">2.7186° W</span></div>
+                <div class="flex justify-between"><span class="text-gray-500">RULER_PLANET:</span><span class="text-neonPink font-bold">Jupiter 🪐</span></div>
+              </div>
+
+              <!-- Interactive Alchemical Decoder nested directly inside coordinates pane -->
+              <div class="retro-dashed-gold p-4 rounded bg-retroBlack/80">
+                <h4 class="text-[11px] text-mysticGold uppercase font-bold tracking-widest mb-1.5 flex items-center gap-2">
+                  ⚡ [ RETRO ALCHEMICAL DECODER ]
+                </h4>
+                <p class="text-[9px] text-gray-400 mb-3">Compose coordinates or words into runic symbols to leave in your log entry:</p>
+                <div class="flex gap-2">
+                  <input type="text" id="rune-input" placeholder="Type words to translate live..." oninput="encodeRunes(this.value)" class="flex-grow bg-retroDark border border-mysticGold/40 text-neonPink p-2 text-[11px] font-mono outline-none focus:border-neonPink rounded">
+                  <button onclick="clearRuneInput()" class="px-2 border border-red-500/50 text-red-400 text-[9px] rounded hover:bg-red-500/10">[ CLEAR ]</button>
+                </div>
+                <div class="mt-3 p-2.5 bg-retroDark border border-mysticGold/20 rounded min-h-[40px] flex items-center justify-between">
+                  <div id="rune-output" class="text-mysticGold text-sm font-bold tracking-widest glow-gold-text">ᛃᚢᛗᛁᛏᛖᚱ</div>
+                  <button onclick="injectRunesToMessage()" class="px-2 py-1 bg-neonPink hover:bg-neonPink/85 text-white text-[9px] font-bold rounded shadow-sm transition-all">
+                    🔮 USE AS SIGNATURE
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Interactive form -->
+            <div class="retro-dashed-gold p-4 rounded bg-retroBlack">
+              <h4 class="text-mysticGold font-bold uppercase mb-3">// LEAVE A TRANSMISSION</h4>
+              <form id="terminal-form" onsubmit="handleFormSubmission(event)" class="space-y-2">
+                <div>
+                  <label class="block text-[9px] text-gray-500 uppercase mb-0.5">Your Avatar Alias:</label>
+                  <input type="text" id="form-alias" required placeholder="RetroWitch_99" class="w-full bg-retroDark border border-mysticGold/30 text-neonPink p-2 text-xs font-mono outline-none focus:border-neonPink rounded">
+                </div>
+                <div>
+                  <label class="block text-[9px] text-gray-500 uppercase mb-0.5">Comm Protocol (Email):</label>
+                  <input type="email" required placeholder="witch@stars.net" class="w-full bg-retroDark border border-mysticGold/30 text-neonPink p-2 text-xs font-mono outline-none focus:border-neonPink rounded">
+                </div>
+                <div>
+                  <label class="block text-[9px] text-gray-500 uppercase mb-0.5">Magic Scribbles (Supports Decoded Runes):</label>
+                  <textarea id="form-message" required rows="3" placeholder="Blessed Be! Type or use the Alchemical Decoder on the left to inject runes here..." class="w-full bg-retroDark border border-mysticGold/30 text-neonPink p-2 text-xs font-mono outline-none focus:border-neonPink rounded"></textarea>
+                </div>
+                <button type="submit" class="w-full bg-retroBlack border-2 border-mysticGold text-mysticGold hover:border-neonPink hover:text-neonPink py-2 text-[11px] uppercase font-bold transition-all">
+                  Sign Guestbook ✍️
+                </button>
+              </form>
+              <div id="form-diagnostics" class="mt-2 text-[10px] text-forestGreen hidden font-bold"></div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- RIGHT MODULE: Cart & Terminal Diagnostics (4 Columns) -->
+      <aside class="lg:col-span-4 space-y-6">
+        
+        <!-- OCCULT CART DRAWER -->
+        <div class="border-2 border-mysticGold bg-retroDark/95 p-5 rounded glow-gold-border flex flex-col justify-between min-h-[400px] relative">
+          <!-- Nostalgic Logo Emblem in Checkout Header Area -->
+          <div class="absolute top-1 right-2 w-8 h-8 rounded border border-mysticGold/30 bg-white overflow-hidden p-0.5">
+            <img src="Screenshot_20260530-134321.png" alt="Cart Logo" class="object-contain w-full h-full" onerror="this.style.display='none'; document.getElementById('cart-logo-fallback').classList.remove('hidden');">
+            <!-- Fallback -->
+            <div id="cart-logo-fallback" class="hidden absolute inset-0 bg-retroBlack flex items-center justify-center text-xs">🪐</div>
+          </div>
+          
+          <div>
+            <div class="flex justify-between items-center border-b border-mysticGold/30 pb-2.5 mb-3">
+              <h3 class="text-neonPink font-bold tracking-widest font-mono text-xs">// YOUR_BASKET</h3>
+              <span id="cart-count-badge" class="bg-neonPink text-white text-[10px] px-2 py-0.5 rounded font-mono">0 ITEMS</span>
+            </div>
+
+            <!-- Cart Items Container -->
+            <div id="cart-items-container" class="space-y-2 max-h-[200px] overflow-y-auto pr-1 font-mono text-xs">
+              <p class="text-gray-500 italic text-center py-10">Basket is empty. Select some clothes or look in the vault!</p>
+            </div>
+          </div>
+
+          <!-- Checkout Metrics -->
+          <div class="border-t border-mysticGold/20 pt-3 mt-4 text-[11px] font-mono">
+            <div class="flex justify-between text-gray-500 mb-1">
+              <span>ESTIMATED WEIGHT:</span>
+              <span id="cart-weight">0.00 kg</span>
+            </div>
+            <div class="flex justify-between text-white font-bold mb-3">
+              <span>BASKET TOTAL:</span>
+              <span id="cart-subtotal" class="text-mysticGold font-bold text-base glow-gold-text">$0.00</span>
+            </div>
+            
+            <!-- Coupon fields -->
+            <div class="flex gap-1 mb-3">
+              <input type="text" id="discount-code" placeholder="ENTER CODE..." class="w-full bg-retroBlack border border-mysticGold/30 text-neonPink px-2 py-1 text-[9px] outline-none focus:border-neonPink rounded">
+              <button onclick="applyDiscountCode()" class="px-2 border border-mysticGold/50 text-mysticGold hover:text-neonPink hover:border-neonPink text-[9px] rounded">APPLY</button>
+            </div>
+
+            <button onclick="initiateSecureCheckout()" class="w-full bg-retroBlack border-2 border-mysticGold hover:border-neonPink text-mysticGold hover:text-neonPink py-2 uppercase font-bold tracking-widest transition-all">
+              Proceed to checkout_
+            </button>
+            <span class="block text-[8px] text-gray-600 text-center mt-2 uppercase tracking-wider">Payments securely handled via encrypted Stripe gateways</span>
+          </div>
+        </div>
+
+        <!-- DIALOG STATUS NOTIFICATIONS -->
+        <div class="border border-mysticGold/30 bg-retroBlack p-3 rounded text-[10px] font-mono space-y-2 max-h-[140px] overflow-hidden">
+          <div class="flex justify-between items-center text-mysticGold border-b border-mysticGold/10 pb-1 mb-1">
+            <span>// PORTAL_OUTPUT</span>
+            <span class="text-forestGreen animate-pulse font-bold">● FEED ONLINE</span>
+          </div>
+          <div id="diagnostic-log" class="space-y-1 text-gray-400 h-[80px] overflow-y-auto pr-1">
+            <p class="text-forestGreen font-bold">> Connection established on retro terminal v2.6.0</p>
+            <p class="text-gray-500">> Retro canvas starry matrix overlay active.</p>
+          </div>
+        </div>
+
+      </aside>
+
+    </main>
+
+    <!-- FOOTER: Retro 88x31 Badges -->
+    <footer class="mt-12 border-t border-mysticGold/20 pt-6 flex flex-col items-center gap-6">
+      
+      <!-- Whimsical Web 1.0 Badges -->
+      <div class="flex flex-wrap justify-center gap-2">
+        <div class="border border-mysticGold bg-gradient-to-r from-retroBlack to-retroDark px-2 py-1 text-[9px] font-mono text-mysticGold uppercase tracking-widest rounded flex items-center gap-1.5 shadow-[0_0_6px_rgba(204,164,26,0.2)]">
+          <span>🪐</span> JUPITER ALIGNED
+        </div>
+        <div class="border border-neonPink bg-gradient-to-r from-retroBlack to-retroDark px-2 py-1 text-[9px] font-mono text-neonPink uppercase tracking-widest rounded flex items-center gap-1.5 shadow-[0_0_6px_rgba(255,0,127,0.2)]">
+          <span>🧶</span> JAYME CREATED
+        </div>
+        <div class="border border-forestGreen bg-gradient-to-r from-retroBlack to-retroDark px-2 py-1 text-[9px] font-mono text-forestGreen uppercase tracking-widest rounded flex items-center gap-1.5">
+          <span>🛸</span> MYSPACE COMPATIBLE
+        </div>
+      </div>
+
+      <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-[9px] font-mono text-gray-500 w-full border-t border-mysticGold/5 pt-4">
+        <p>© 2026 JUPITER'S EMPORIUM. RETRO PORTAL INJECT BY JAYME & DEVELOPER TEAM.</p>
+        <div class="flex gap-4">
+          <a href="#" onclick="event.preventDefault(); writeDiagnosticLog('Link trace: Retro Instagram profile');" class="hover:text-neonPink transition-colors">[ INSTAGRAM_LINK ]</a>
+          <a href="#" onclick="event.preventDefault(); writeDiagnosticLog('Link trace: Retro TikTok stream');" class="hover:text-neonPink transition-colors">[ TIKTOK_LINK ]</a>
+          <a href="#" onclick="event.preventDefault(); writeDiagnosticLog('Opening Occult Guidelines');" class="hover:text-neonPink transition-colors">[ OCCULT_GUIDES ]</a>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- INSPECT MODALS CONTAINER -->
+  <div id="inspect-modal" class="fixed inset-0 bg-black/90 flex items-center justify-center p-4 z-50 hidden">
+    <div class="border-2 border-mysticGold bg-retroBlack p-5 max-w-sm w-full rounded glow-gold-border font-mono relative">
+      <button onclick="closeInspectModal()" class="absolute top-2.5 right-2.5 text-red-500 hover:text-red-400 font-bold">[ X ]</button>
+      <div id="modal-content" class="space-y-3.5 text-xs">
+        <!-- Dyn details -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom Site Logic & Interaction State Script -->
+  <script>
+    let audioCtx = null;
+    let jukeboxSource = null; 
+    let jukeboxGainNode = null;
+    let activeTrackType = null; 
+    let lullabyInterval = null;
+    let chordIndex = 0;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        jukeboxGainNode = audioCtx.createGain();
+        jukeboxGainNode.connect(audioCtx.destination);
+        const volumeControl = document.getElementById('audio-volume');
+        jukeboxGainNode.gain.setValueAtTime(parseFloat(volumeControl.value), audioCtx.currentTime);
+      }
+    }
+
+    function adjustVolume(value) {
+      if (audioCtx && jukeboxGainNode) {
+        jukeboxGainNode.gain.setValueAtTime(parseFloat(value), audioCtx.currentTime);
+      }
+    }
+
+    function createPinkNoiseBuffer() {
+      const bufferSize = 2 * audioCtx.sampleRate;
+      const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+      const output = noiseBuffer.getChannelData(0);
+      let b0, b1, b2, b3, b4, b5, b6;
+      b0 = b1 = b2 = b3 = b4 = b5 = b6 = 0.0;
+      for (let i = 0; i < bufferSize; i++) {
+        let white = Math.random() * 2 - 1;
+        b0 = 0.99886 * b0 + white * 0.0555179;
+        b1 = 0.99332 * b1 + white * 0.0750759;
+        b2 = 0.96900 * b2 + white * 0.1538520;
+        b3 = 0.86650 * b3 + white * 0.3104856;
+        b4 = 0.55000 * b4 + white * 0.5329522;
+        b5 = -0.7616 * b5 - white * 0.0168980;
+        output[i] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
+        output[i] *= 0.11; 
+        b6 = white * 0.115926;
+      }
+      return noiseBuffer;
+    }
+
+    function playAstralNote(freq, delay, duration) {
+      if (!audioCtx) return;
+      const now = audioCtx.currentTime + delay;
+      const osc = audioCtx.createOscillator();
+      const subOsc = audioCtx.createOscillator();
+      const filter = audioCtx.createBiquadFilter();
+      const gainNode = audioCtx.createGain();
+
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, now);
+      
+      subOsc.type = 'sine';
+      subOsc.frequency.setValueAtTime(freq / 2, now);
+
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(800, now);
+      filter.frequency.exponentialRampToValueAtTime(200, now + duration);
+
+      gainNode.gain.setValueAtTime(0.0, now);
+      gainNode.gain.linearRampToValueAtTime(0.02, now + 0.2); 
+      gainNode.gain.exponentialRampToValueAtTime(0.00001, now + duration);
+
+      osc.connect(filter);
+      subOsc.connect(filter);
+      filter.connect(gainNode);
+      gainNode.connect(jukeboxGainNode);
+
+      osc.start(now);
+      subOsc.start(now);
+      osc.stop(now + duration + 0.1);
+      subOsc.stop(now + duration + 0.1);
+    }
+
+    function runAstralSequencer() {
+      const chords = [
+        [261.63, 329.63, 392.00, 493.88], 
+        [220.00, 261.63, 329.63, 392.00], 
+        [349.23, 440.00, 523.25, 659.25], 
+        [293.66, 349.23, 440.00, 587.33]  
+      ];
+      
+      const currentChord = chords[chordIndex];
+      currentChord.forEach((note, i) => {
+        playAstralNote(note, i * 0.12, 3.5);
+      });
+
+      chordIndex = (chordIndex + 1) % chords.length;
+      animateVisualizer();
+    }
+
+    function playTrack(type) {
+      initAudio();
+      stopJukebox(); 
+      
+      activeTrackType = type;
+      writeDiagnosticLog(`Jukebox Track loaded: ${type.toUpperCase()}`);
+      
+      document.querySelectorAll('.track-btn').forEach(btn => {
+        btn.classList.remove('border-neonPink', 'text-neonPink', 'glow-pink-text');
+        btn.classList.add('border-mysticGold/30', 'text-mysticGold');
+      });
+      document.getElementById(`btn-track-${type}`).classList.add('border-neonPink', 'text-neonPink', 'glow-pink-text');
+      
+      const trackLabel = document.getElementById('current-track-name');
+
+      if (type === 'hum') {
+        trackLabel.innerText = "Ambient Hum (108Hz Solfeggio)";
+        const osc = audioCtx.createOscillator();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(108, audioCtx.currentTime);
+        osc.connect(jukeboxGainNode);
+        osc.start();
+        jukeboxSource = osc;
+        animateVisualizer(true);
+      } 
+      else if (type === 'pink') {
+        trackLabel.innerText = "Pink Cosmic Dust Noise";
+        const noiseNode = audioCtx.createBufferSource();
+        noiseNode.buffer = createPinkNoiseBuffer();
+        noiseNode.loop = true;
+        noiseNode.connect(jukeboxGainNode);
+        noiseNode.start();
+        jukeboxSource = noiseNode;
+        animateVisualizer(true);
+      } 
+      else if (type === 'lullaby') {
+        trackLabel.innerText = "Astral Lullaby Synthesizer";
+        runAstralSequencer();
+        lullabyInterval = setInterval(runAstralSequencer, 4000);
+      }
+    }
+
+    function stopJukebox() {
+      document.querySelectorAll('.track-btn').forEach(btn => {
+        btn.classList.remove('border-neonPink', 'text-neonPink', 'glow-pink-text');
+        btn.classList.add('border-mysticGold/30', 'text-mysticGold');
+      });
+      
+      document.getElementById('current-track-name').innerText = "Jukebox Muted";
+
+      if (jukeboxSource) {
+        try { jukeboxSource.stop(); } catch(e) {}
+        jukeboxSource = null;
+      }
+      
+      if (lullabyInterval) {
+        clearInterval(lullabyInterval);
+        lullabyInterval = null;
+      }
+      
+      activeTrackType = null;
+      resetVisualizer();
+    }
+
+    function playBeep(freq = 440, duration = 0.05, type = 'sine') {
+      try {
+        if (!audioCtx) return;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.012, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    function playCrestFreq() {
+      initAudio();
+      playBeep(528, 0.4, 'sine'); 
+      writeDiagnosticLog("Chimed 528Hz manifest frequency on profile avatar!");
+    }
+
+    let vizTimer = null;
+    function animateVisualizer(continuous = false) {
+      if (vizTimer) clearInterval(vizTimer);
+      const bars = document.querySelectorAll('.viz-bar');
+      
+      if (continuous) {
+        vizTimer = setInterval(() => {
+          bars.forEach(bar => {
+            const h = 4 + Math.floor(Math.random() * 12);
+            bar.style.height = `${h}px`;
+          });
+        }, 150);
+      } else {
+        bars.forEach(bar => {
+          bar.style.height = `14px`;
+          setTimeout(() => bar.style.height = `4px`, 400);
+        });
+      }
+    }
+
+    function resetVisualizer() {
+      if (vizTimer) clearInterval(vizTimer);
+      document.querySelectorAll('.viz-bar').forEach(bar => bar.style.height = '4px');
+    }
+
+    const canvas = document.getElementById('magic-canvas');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    let stars = [];
+    const maxStars = 45;
+    const starGraphemes = ['★', '✦', '✧', '✦', '.', '+', '•'];
+
+    function createStars() {
+      stars = [];
+      for (let i = 0; i < maxStars; i++) {
+        stars.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          char: starGraphemes[Math.floor(Math.random() * starGraphemes.length)],
+          opacity: Math.random(),
+          speed: 0.15 + Math.random() * 0.4,
+          color: Math.random() > 0.5 ? '#ff007f' : '#cca41a'
+        });
+      }
+    }
+    createStars();
+    window.addEventListener('resize', createStars);
+
+    function drawStars() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      for (let i = 0; i < stars.length; i++) {
+        const s = stars[i];
+        ctx.fillStyle = s.color;
+        ctx.font = '12px monospace';
+        
+        s.opacity += (Math.random() - 0.5) * 0.1;
+        if (s.opacity < 0.1) s.opacity = 0.1;
+        if (s.opacity > 1) s.opacity = 1;
+        
+        ctx.globalAlpha = s.opacity;
+        ctx.fillText(s.char, s.x, s.y);
+        
+        s.y += s.speed;
+        if (s.y > canvas.height) {
+          s.y = 0;
+          s.x = Math.random() * canvas.width;
+        }
+      }
+      ctx.globalAlpha = 1.0;
+      requestAnimationFrame(drawStars);
+    }
+    requestAnimationFrame(drawStars);
+
+    function switchTab(tabId) {
+      playBeep(320, 0.06, 'triangle');
+      
+      document.querySelectorAll('.tab-pane').forEach(el => el.classList.add('hidden'));
+      document.getElementById('tab-' + tabId).classList.remove('hidden');
+
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.className = 'nav-btn px-3 py-1.5 border border-mysticGold/40 text-mysticGold bg-retroBlack rounded transition-all';
+      });
+
+      const activeBtn = document.getElementById('nav-' + tabId);
+      activeBtn.className = 'nav-btn px-3 py-1.5 border-2 border-neonPink text-neonPink bg-retroBlack rounded transition-all';
+
+      writeDiagnosticLog(`Accessing profile log tab: [${tabId.toUpperCase()}]`);
+    }
+
+    function writeDiagnosticLog(message) {
+      const container = document.getElementById('diagnostic-log');
+      const p = document.createElement('p');
+      p.innerText = `> ${message}`;
+      p.className = message.includes('Error') ? 'text-red-500' : 'text-forestGreen font-bold';
+      container.appendChild(p);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    const runeMap = {
+      'a': 'ᚨ', 'b': 'ᛒ', 'c': 'ᚲ', 'd': 'ᛞ', 'e': 'ᛖ', 'f': 'ᚠ', 'g': 'ᚷ', 'h': 'ᚺ',
+      'i': 'ᛁ', 'j': 'ᛃ', 'k': 'ᚲ', 'l': 'ᛚ', 'm': 'ᛗ', 'n': 'ᚾ', 'o': 'ᛟ', 'p': 'ᛈ',
+      'q': 'ᚲ', 'r': 'ᚱ', 's': 'ᛊ', 't': 'ᛏ', 'u': 'ᚢ', 'v': 'ᚢ', 'w': 'ᚹ', 'x': 'ᛊ',
+      'y': 'ᛃ', 'z': 'ᛉ', ' ': ' ', '1': 'Ⅰ', '2': 'Ⅱ', '3': 'Ⅲ', '4': 'Ⅳ', '5': 'Ⅴ'
+    };
+
+    function encodeRunes(val) {
+      playBeep(580, 0.02, 'sine');
+      const output = document.getElementById('rune-output');
+      if (!val) {
+        output.innerText = 'ᛃᚢᛗᛁᛏᛖᚱ';
+        return;
+      }
+      const encoded = val.toLowerCase().split('').map(char => runeMap[char] || char).join('');
+      output.innerText = encoded;
+    }
+
+    function clearRuneInput() {
+      playBeep(200, 0.08, 'sine');
+      const input = document.getElementById('rune-input');
+      input.value = '';
+      encodeRunes('');
+    }
+
+    function injectRunesToMessage() {
+      playBeep(640, 0.05, 'triangle');
+      const translated = document.getElementById('rune-output').innerText;
+      const textarea = document.getElementById('form-message');
+      
+      if (textarea.value) {
+        textarea.value += ' ' + translated;
+      } else {
+        textarea.value = translated;
+      }
+      
+      writeDiagnosticLog(`Injected translated runes: [${translated}] into log entry.`);
+    }
+
+    let currentModel = 'aria';
+    let studioOutfit = {
+      top: null,
+      bottom: null,
+      cloak: null,
+      accessory: null
+    };
+
+    function selectModel(modelId) {
+      playBeep(380, 0.05, 'triangle');
+      currentModel = modelId;
+      
+      const btnAria = document.getElementById('model-select-aria');
+      const btnRowan = document.getElementById('model-select-rowan');
+      const textId = document.getElementById('active-model-id');
+      const backdrop = document.getElementById('studio-backdrop');
+
+      const bodyAria = document.getElementById('model-aria-body');
+      const bodyRowan = document.getElementById('model-rowan-body');
+
+      if (modelId === 'aria') {
+        btnAria.className = 'px-3 py-2 border-2 border-neonPink text-neonPink bg-retroBlack rounded transition-all';
+        btnRowan.className = 'px-3 py-2 border border-mysticGold/30 text-mysticGold bg-retroBlack rounded transition-all';
+        textId.innerText = 'MODEL_NODE: ARIA_01';
+        backdrop.style.borderColor = '#ff007f';
+        bodyAria.classList.remove('hidden');
+        bodyRowan.classList.add('hidden');
+      } else {
+        btnRowan.className = 'px-3 py-2 border-2 border-neonPink text-neonPink bg-retroBlack rounded transition-all';
+        btnAria.className = 'px-3 py-2 border border-mysticGold/30 text-mysticGold bg-retroBlack rounded transition-all';
+        textId.innerText = 'MODEL_NODE: ROWAN_02';
+        backdrop.style.borderColor = '#cca41a';
+        bodyRowan.classList.remove('hidden');
+        bodyAria.classList.add('hidden');
+      }
+      writeDiagnosticLog(`Flipped active avatar frame path to: ${modelId.toUpperCase()}`);
+    }
+
+    function toggleWearable(category, assetId, price) {
+      playBeep(420, 0.04, 'sine');
+      const button = document.getElementById(`btn-${assetId}`);
+      const svgLayer = document.getElementById(`svg-${assetId}`);
+      
+      if (studioOutfit[category] && studioOutfit[category].id === assetId) {
+        studioOutfit[category] = null;
+        button.classList.remove('border-neonPink', 'text-neonPink');
+        button.classList.add('border-mysticGold/25');
+        svgLayer.classList.add('hidden');
+        writeDiagnosticLog(`Deselected garment: ${assetId.toUpperCase()}`);
+      } else {
+        if (studioOutfit[category]) {
+          const oldAssetId = studioOutfit[category].id;
+          document.getElementById(`btn-${oldAssetId}`).classList.remove('border-neonPink', 'text-neonPink');
+          document.getElementById(`btn-${oldAssetId}`).classList.add('border-mysticGold/25');
+          document.getElementById(`svg-${oldAssetId}`).classList.add('hidden');
+        }
+
+        studioOutfit[category] = { id: assetId, price: price, name: button.querySelector('.font-bold').innerText };
+        button.classList.remove('border-mysticGold/25');
+        button.classList.add('border-neonPink', 'text-neonPink');
+        svgLayer.classList.remove('hidden');
+        writeDiagnosticLog(`Equipped garment element: ${assetId.toUpperCase()}`);
+      }
+
+      updateStudioValuation();
+    }
+
+    function updateStudioValuation() {
+      let sumVal = 0;
+      if (studioOutfit.top) sumVal += studioOutfit.top.price;
+      if (studioOutfit.bottom) sumVal += studioOutfit.bottom.price;
+      if (studioOutfit.cloak) sumVal += studioOutfit.cloak.price;
+      if (studioOutfit.accessory) sumVal += studioOutfit.accessory.price;
+
+      document.getElementById('studio-valuation-badge').innerText = `$${sumVal.toFixed(2)}`;
+    }
+
+    function filterVault(category) {
+      playBeep(420, 0.04, 'sine');
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.className = 'filter-btn px-2 py-0.5 border border-mysticGold/30 text-mysticGold rounded bg-retroBlack transition-all';
+      });
+
+      const activeFilterBtn = document.getElementById(`filter-${category}`);
+      activeFilterBtn.className = 'filter-btn px-2 py-0.5 border border-neonPink text-neonPink rounded bg-retroBlack transition-all';
+
+      document.querySelectorAll('.vault-card').forEach(card => {
+        if (category === 'all' || card.getAttribute('data-category') === category) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+      writeDiagnosticLog(`Filtering vault items by: ${category.toUpperCase()}`);
+    }
+
+    function searchVault(query) {
+      const q = query.toLowerCase().trim();
+      document.querySelectorAll('.vault-card').forEach(card => {
+        const name = card.getAttribute('data-name');
+        if (name.includes(q)) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    }
+
+    const inspectDatabase = {
+      ins01: {
+        title: "Himalayan Cedarwood Incense",
+        price: "$18.00",
+        weight: "0.20 kg",
+        materials: "Pine resins, essential cedar extracts",
+        properties: "Gathered organically from Nepalese valleys to cleanse spaces and restore meditative calm."
+      },
+      cr09: {
+        title: "Raw Citrine Cluster",
+        price: "$32.00",
+        weight: "0.35 kg",
+        materials: "Raw golden quartz crystal structure",
+        properties: "A celestial amplifier focused on solar plexus energy, bringing luck, success, and warm creative vibrations."
+      },
+      bo04: {
+        title: "Black Obsidian Scrying Mirror",
+        price: "$45.00",
+        weight: "0.75 kg",
+        materials: "Polished obsidian volcanic glass",
+        properties: "Highly defensive focal tool designed for vision journeys, aura diagnostics, and shadow transmutation."
+      },
+      cc02: {
+        title: "Amethyst Knit Wrap Shrug",
+        price: "$78.00",
+        weight: "0.55 kg",
+        materials: "Custom organic cotton yarn, real amethyst nodes",
+        properties: "Jayme's custom crochet wrap shrug with hand-sewn amethyst crystals along the cuff points."
+      }
+    };
+
+    function openInspectModal(key) {
+      playBeep(500, 0.08, 'sine');
+      const item = inspectDatabase[key];
+      const container = document.getElementById('modal-content');
+
+      container.innerHTML = `
+        <div>
+          <span class="text-[8px] text-neonPink uppercase tracking-widest">// ARCHIVE INSPECT DETAILS</span>
+          <h3 class="text-base font-bold text-white mt-0.5">${item.title}</h3>
+        </div>
+        <div class="border-t border-mysticGold/25 pt-2 space-y-1.5 text-[11px]">
+          <div><span class="text-gray-500 font-bold">VALUATION:</span> <span class="text-mysticGold">${item.price}</span></div>
+          <div><span class="text-gray-500 font-bold">MASS:</span> <span class="text-white">${item.weight}</span></div>
+          <div><span class="text-gray-500 font-bold">CONSTITUENTS:</span> <span class="text-white">${item.materials}</span></div>
+          <div class="border-t border-mysticGold/10 pt-1.5">
+            <span class="text-gray-500 block">PROPERTIES:</span>
+            <p class="text-gray-300 leading-normal mt-0.5">${item.properties}</p>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('inspect-modal').classList.remove('hidden');
+    }
+
+    function closeInspectModal() {
+      playBeep(210, 0.05, 'triangle');
+      document.getElementById('inspect-modal').classList.add('hidden');
+    }
+
+    function handleFormSubmission(event) {
+      event.preventDefault();
+      playBeep(640, 0.12, 'sine');
+      const btn = event.target.querySelector('button');
+      const diagnostics = document.getElementById('form-diagnostics');
+
+      btn.innerText = "Encrypting Signal...";
+      btn.disabled = true;
+
+      setTimeout(() => {
+        btn.innerText = "Sign Guestbook ✍️";
+        btn.disabled = false;
+        diagnostics.classList.remove('hidden');
+        diagnostics.innerText = "> Signed successfully. Your pixel coordinate signature has been logged.";
+        writeDiagnosticLog("Guestbook Transmission: Logged successfully into memory stream.");
+        event.target.reset();
+      }, 1100);
+    }
+
+    let activeCart = [];
+    let discountMultiplier = 1.0;
+
+    function addToCart(name, price, weight = 0.30) {
+      playBeep(540, 0.05, 'sine');
+      activeCart.push({ name, price, weight });
+      writeDiagnosticLog(`Registered item to cart: ${name.toUpperCase()} (+$${price.toFixed(2)})`);
+      updateCartDisplay();
+    }
+
+    function removeItemFromCart(index) {
+      playBeep(260, 0.08, 'sine');
+      const item = activeCart[index];
+      activeCart.splice(index, 1);
+      writeDiagnosticLog(`De-registered item: ${item.name.toUpperCase()}`);
+      updateCartDisplay();
+    }
+
+    function addOutfitToCart() {
+      let itemsCount = 0;
+      if (studioOutfit.top) {
+        addToCart(studioOutfit.top.name, studioOutfit.top.price, 0.40);
+        itemsCount++;
+      }
+      if (studioOutfit.bottom) {
+        addToCart(studioOutfit.bottom.name, studioOutfit.bottom.price, 0.50);
+        itemsCount++;
+      }
+      if (studioOutfit.cloak) {
+        addToCart(studioOutfit.cloak.name, studioOutfit.cloak.price, 1.00);
+        itemsCount++;
+      }
+      if (studioOutfit.accessory) {
+        addToCart(studioOutfit.accessory.name, studioOutfit.accessory.price, 0.10);
+        itemsCount++;
+      }
+
+      if (itemsCount > 0) {
+        clearStudioSelections();
+        writeDiagnosticLog(`Success: Active Lookbook layers transfer-assembled to Cart`);
+      } else {
+        writeDiagnosticLog(`Error: Core outfit wardrobe slots empty. Equip items first.`);
+      }
+    }
+
+    function clearStudioSelections() {
+      if (studioOutfit.top) toggleWearable('top', studioOutfit.top.id, 0);
+      if (studioOutfit.bottom) toggleWearable('bottom', studioOutfit.bottom.id, 0);
+      if (studioOutfit.cloak) toggleWearable('cloak', studioOutfit.cloak.id, 0);
+      if (studioOutfit.accessory) toggleWearable('accessory', studioOutfit.accessory.id, 0);
+    }
+
+    function applyDiscountCode() {
+      const codeInput = document.getElementById('discount-code');
+      const val = codeInput.value.toUpperCase().trim();
+      
+      if (val === 'JUPITER') {
+        playBeep(600, 0.12, 'triangle');
+        discountMultiplier = 0.85; 
+        writeDiagnosticLog("Discount activated: JUPITER key unlocked 15% off!");
+        updateCartDisplay();
+      } else {
+        playBeep(180, 0.15, 'sine');
+        writeDiagnosticLog(`Discount key validation failed: "${val}"`);
+      }
+      codeInput.value = '';
+    }
+
+    function updateCartDisplay() {
+      const container = document.getElementById('cart-items-container');
+      const badgeCount = document.getElementById('cart-count-badge');
+      const subtotalEl = document.getElementById('cart-subtotal');
+      const weightEl = document.getElementById('cart-weight');
+
+      container.innerHTML = '';
+
+      if (activeCart.length === 0) {
+        container.innerHTML = '<p class="text-gray-500 italic text-center py-10">Basket is empty. Select some clothes or look in the vault!</p>';
+        badgeCount.innerText = '0 ITEMS';
+        subtotalEl.innerText = '$0.00';
+        weightEl.innerText = '0.00 kg';
+        return;
+      }
+
+      let subtotal = 0;
+      let totalWeight = 0;
+
+      activeCart.forEach((item, index) => {
+        subtotal += item.price;
+        totalWeight += item.weight;
+
+        const div = document.createElement('div');
+        div.className = 'flex justify-between items-center border border-mysticGold/20 p-2 bg-retroBlack rounded group';
+        div.innerHTML = `
+          <div class="flex flex-col">
+            <span class="font-bold text-gray-200">${item.name}</span>
+            <span class="text-[9px] text-neonPink uppercase">E-COMMERCE UNIT</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="text-mysticGold font-mono">$${item.price.toFixed(2)}</span>
+            <button onclick="removeItemFromCart(${index})" class="text-red-500 hover:text-red-400 font-bold px-1">[ X ]</button>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+
+      const finalPrice = subtotal * discountMultiplier;
+      
+      badgeCount.innerText = `${activeCart.length} ITEMS`;
+      subtotalEl.innerText = `$${finalPrice.toFixed(2)}`;
+      weightEl.innerText = `${totalWeight.toFixed(2)} kg`;
+    }
+
+    function initiateSecureCheckout() {
+      if (activeCart.length === 0) {
+        writeDiagnosticLog("Checkout interrupted: No items located in active cart");
+        return;
+      }
+      playBeep(700, 0.20, 'sine');
+      writeDiagnosticLog("Packaging transaction files... Securely routing checkout token...");
+      
+      setTimeout(() => {
+        const modal = document.createElement('div');
+        modal.className = 'fixed inset-0 bg-black/90 flex items-center justify-center p-4 z-50';
+        modal.innerHTML = `
+          <div class="border-2 border-mysticGold bg-retroBlack p-8 max-w-md w-full rounded glow-gold-border font-mono text-center relative">
+            <h3 class="text-neonPink text-lg font-bold mb-4 glow-pink-text">// SECURE TRANSMISSION ACTIVE</h3>
+            <p class="text-xs text-gray-400 mb-6">Payment parameters parsed successfully. In a production setting, this handoff links directly to Stripe's payment gateway.</p>
+            
+            <div class="border border-mysticGold/30 p-3 rounded mb-6 text-left text-xs bg-retroDark">
+              <span class="text-mysticGold block mb-2 font-bold">Transaction Ledger:</span>
+              ${activeCart.map(i => `<div>- ${i.name} ($${i.price.toFixed(2)})</div>`).join('')}
+              <div class="border-t border-mysticGold/15 mt-2 pt-2 text-neonPink flex justify-between font-bold">
+                <span>ESTIMATED TOTAL:</span>
+                <span>$${(activeCart.reduce((sum, i) => sum + i.price, 0) * discountMultiplier).toFixed(2)}</span>
+              </div>
+            </div>
+            
+            <button onclick="this.parentElement.parentElement.remove()" class="border border-neonPink text-neonPink px-6 py-2 hover:bg-neonPink/10 transition-colors text-xs uppercase font-bold tracking-widest rounded">
+              Close Gateway_
+            </button>
+          </div>
+        `;
+        document.body.appendChild(modal);
+      }, 750);
+    }
+
+    window.onload = () => {
+      writeDiagnosticLog("System Boot Sequence: Completed Successfully");
+      writeDiagnosticLog("Celestial whimsical star overlay active.");
+    };
+  </script>
+
+</body>
+</html>
