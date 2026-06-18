@@ -228,7 +228,7 @@
                   <span>✨ Welcome to Jayme's Alchemical Vault! ✨</span>
                 </h3>
                 <p class="text-gray-400 text-[11px]">
-                  "Mixing Nepalese handlooms with glowing custom crochet stitches, direct high-altitude Himalayan incense, and vibrant crystal nodes.<comment-tag id="1"> Glastonbury aligned.</comment-tag id="1" text="Removed mention of Glastonbury as requested." type="suggestion">"
+                  "Mixing Nepalese handlooms with glowing custom crochet stitches, direct high-altitude Himalayan incense, and vibrant crystal nodes. Virtual aligned."
                 </p>
                 <div class="flex flex-wrap gap-2 pt-1 text-[10px]">
                   <span class="bg-neonPink/10 text-neonPink border border-neonPink/30 px-2 py-0.5 rounded">#Web1.0</span>
@@ -252,7 +252,7 @@
                 </div>
                 <div class="bg-retroBlack border border-mysticGold/20 p-2 rounded text-center group hover:border-neonPink transition-colors">
                   <div class="text-xl mb-1">🧶</div>
-                  <div class="text-[9px] text-gray-400 truncate font-mono"><comment-tag id="2">Glastonbury</comment-tag id="2" text="Changed Glastonbury to The Studio." type="suggestion"></div>
+                  <div class="text-[9px] text-gray-400 truncate font-mono">The Studio</div>
                 </div>
                 <div class="bg-retroBlack border border-mysticGold/20 p-2 rounded text-center group hover:border-neonPink transition-colors">
                   <div class="text-xl mb-1">🏔</div>
@@ -524,6 +524,8 @@
               
               <!-- Card 1 -->
               <div class="vault-card border border-mysticGold/30 bg-retroBlack p-3 rounded flex flex-col justify-between hover:border-neonPink transition-colors" data-category="nepalese" data-name="himalayan cedarwood incense">
+                <!-- IMAGE PLACEHOLDER -->
+                <img src="path/to/cedarwood.webp" alt="Himalayan Cedarwood Incense" class="w-full h-32 object-cover rounded mb-2 border border-mysticGold/20">
                 <div class="flex justify-between items-start mb-2">
                   <div>
                     <span class="text-[8px] text-neonPink block uppercase">INCENSE // RES01</span>
@@ -542,6 +544,8 @@
 
               <!-- Card 2 -->
               <div class="vault-card border border-mysticGold/30 bg-retroBlack p-3 rounded flex flex-col justify-between hover:border-neonPink transition-colors" data-category="crystals" data-name="raw citrine cluster">
+                 <!-- IMAGE PLACEHOLDER -->
+                <img src="path/to/citrine.webp" alt="Raw Citrine Cluster" class="w-full h-32 object-cover rounded mb-2 border border-mysticGold/20">
                 <div class="flex justify-between items-start mb-2">
                   <div>
                     <span class="text-[8px] text-neonPink block uppercase">CRYSTALS // CITR9</span>
@@ -618,7 +622,7 @@
               </p>
               
               <div class="border border-mysticGold/25 p-3 rounded bg-retroBlack space-y-1.5 text-[10px]">
-                <div class="flex justify-between"><span class="text-gray-500">ORIGIN:</span><span class="text-white">Kathmandu / <comment-tag id="3">Glastonbury</comment-tag id="3" text="Changed to Virtual." type="suggestion"></span></div>
+                <div class="flex justify-between"><span class="text-gray-500">ORIGIN:</span><span class="text-white">Kathmandu / Virtual</span></div>
                 <div class="flex justify-between"><span class="text-gray-500">COORDINATE_LAT:</span><span class="text-white">51.1479° N</span></div>
                 <div class="flex justify-between"><span class="text-gray-500">COORDINATE_LON:</span><span class="text-white">2.7186° W</span></div>
                 <div class="flex justify-between"><span class="text-gray-500">RULER_PLANET:</span><span class="text-neonPink font-bold">Jupiter 🪐</span></div>
@@ -1213,28 +1217,32 @@
         price: "$18.00",
         weight: "0.20 kg",
         materials: "Pine resins, essential cedar extracts",
-        properties: "Gathered organically from Nepalese valleys to cleanse spaces and restore meditative calm."
+        properties: "Gathered organically from Nepalese valleys to cleanse spaces and restore meditative calm.",
+        image: "path/to/cedarwood.webp"
       },
       cr09: {
         title: "Raw Citrine Cluster",
         price: "$32.00",
         weight: "0.35 kg",
         materials: "Raw golden quartz crystal structure",
-        properties: "A celestial amplifier focused on solar plexus energy, bringing luck, success, and warm creative vibrations."
+        properties: "A celestial amplifier focused on solar plexus energy, bringing luck, success, and warm creative vibrations.",
+        image: "path/to/citrine.webp"
       },
       bo04: {
         title: "Black Obsidian Scrying Mirror",
         price: "$45.00",
         weight: "0.75 kg",
         materials: "Polished obsidian volcanic glass",
-        properties: "Highly defensive focal tool designed for vision journeys, aura diagnostics, and shadow transmutation."
+        properties: "Highly defensive focal tool designed for vision journeys, aura diagnostics, and shadow transmutation.",
+        image: "path/to/mirror.webp"
       },
       cc02: {
         title: "Amethyst Knit Wrap Shrug",
         price: "$78.00",
         weight: "0.55 kg",
         materials: "Custom organic cotton yarn, real amethyst nodes",
-        properties: "Jayme's custom crochet wrap shrug with hand-sewn amethyst crystals along the cuff points."
+        properties: "Jayme's custom crochet wrap shrug with hand-sewn amethyst crystals along the cuff points.",
+        image: "path/to/shrug.webp"
       }
     };
 
@@ -1245,12 +1253,14 @@
 
       container.innerHTML = `
         <div>
+          <!-- MODAL IMAGE DYNAMIC IMPLEMENTATION -->
+          <img src="${item.image}" alt="${item.title}" class="w-full h-auto rounded mb-3 border border-mysticGold/20">
           <span class="text-[8px] text-neonPink uppercase tracking-widest">// ARCHIVE INSPECT DETAILS</span>
           <h3 class="text-base font-bold text-white mt-0.5">${item.title}</h3>
         </div>
         <div class="border-t border-mysticGold/25 pt-2 space-y-1.5 text-[11px]">
           <div><span class="text-gray-500 font-bold">VALUATION:</span> <span class="text-mysticGold">${item.price}</span></div>
-          <div><span class="text-gray-500 font-bold">MASS:</span> <span class="item.weight}</span></div>
+          <div><span class="text-gray-500 font-bold">MASS:</span> <span class="text-white">${item.weight}</span></div>
           <div><span class="text-gray-500 font-bold">CONSTITUENTS:</span> <span class="text-white">${item.materials}</span></div>
           <div class="border-t border-mysticGold/10 pt-1.5">
             <span class="text-gray-500 block">PROPERTIES:</span>
