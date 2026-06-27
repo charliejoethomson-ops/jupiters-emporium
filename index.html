@@ -17,12 +17,22 @@
             retroBlack: '#0a0a0c',
             retroDark: '#121216',
             neonPink: '#ff007f',
-            mysticGold: '#cca41a', // Deepened mystical gold-yellow
-            forestGreen: '#1b4d3e', // Deep mystical forest green
+            mysticGold: '#cca41a',
+            forestGreen: '#1b4d3e',
           },
           fontFamily: {
             mono: ['"Courier Prime"', 'monospace'],
             sans: ['Montserrat', 'sans-serif'],
+          },
+          animation: {
+            'float': 'float 4s ease-in-out infinite',
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-8px)' },
+            }
           }
         }
       }
@@ -36,7 +46,6 @@
       overflow-x: hidden;
     }
 
-    /* Whimsical Nostalgia Glows */
     .glow-pink-text {
       color: #ff007f;
       text-shadow: 0 0 6px rgba(255, 0, 127, 0.7), 0 0 15px rgba(255, 0, 127, 0.3);
@@ -47,7 +56,6 @@
       text-shadow: 0 0 6px rgba(204, 164, 26, 0.7), 0 0 12px rgba(204, 164, 26, 0.3);
     }
 
-    /* Double dashed borders mimicking early custom profile templates */
     .retro-dashed-pink {
       border: 2px dashed #ff007f;
       box-shadow: 0 0 8px rgba(255, 0, 127, 0.3);
@@ -58,20 +66,14 @@
       box-shadow: 0 0 8px rgba(204, 164, 26, 0.3);
     }
 
-    /* Custom scrollbar matching retro colors */
-    ::-webkit-scrollbar {
-      width: 8px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #0a0a0c;
-    }
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #0a0a0c; }
     ::-webkit-scrollbar-thumb {
       background: #ff007f;
       border: 2px solid #0a0a0c;
       border-radius: 4px;
     }
 
-    /* Magic canvas overlay */
     #magic-canvas {
       position: fixed;
       top: 0;
@@ -80,57 +82,48 @@
       height: 100%;
       z-index: 0;
       opacity: 0.3;
-      pointer-events: auto; /* Enable hover triggers for Wind Chimes */
+      pointer-events: auto; 
     }
 
-    /* Nostalgic tiling starry grid */
     .retro-grid-pattern {
       background-image: linear-gradient(to right, rgba(255, 0, 127, 0.03) 1px, transparent 1px),
                         linear-gradient(to bottom, rgba(255, 0, 127, 0.03) 1px, transparent 1px);
       background-size: 24px 24px;
     }
-
-    /* Blink animation classic to early web */
-    .retro-blink {
-      animation: blinker 1.5s linear infinite;
-    }
-    @keyframes blinker {
-      50% { opacity: 0; }
-    }
     
-    /* Simple visualizer animation lines */
     .viz-bar {
       width: 3px;
       height: 4px;
       background-color: #ff007f;
       transition: height 0.1s ease-in-out;
     }
+
+    /* Active Nav Tab Style */
+    .nav-active {
+      border-bottom: 2px solid #ff007f !important;
+      color: #ff007f !important;
+      background: linear-gradient(to top, rgba(255,0,127,0.1), transparent) !important;
+      text-shadow: 0 0 8px rgba(255, 0, 127, 0.5);
+    }
   </style>
 </head>
 <body class="text-gray-200 retro-grid-pattern min-h-screen relative selection:bg-neonPink selection:text-white pb-12">
 
-  <!-- Magic Twinkling Retro Star Canvas -->
   <canvas id="magic-canvas"></canvas>
 
-  <!-- Main Container -->
-  <div class="relative z-10 flex flex-col min-h-screen max-w-7xl mx-auto px-4 md:px-8 py-6">
+  <div class="relative z-10 flex flex-col min-h-screen max-w-[85rem] mx-auto px-4 md:px-8 py-6">
     
-    <!-- MSN Messenger Style Status Header -->
-    <div class="border-2 border-mysticGold bg-retroDark/95 p-4 rounded mb-8 glow-gold-border flex flex-col lg:flex-row justify-between items-center gap-4">
+    <header class="border-2 border-mysticGold bg-retroDark/95 p-4 rounded mb-4 shadow-[0_0_15px_rgba(204,164,26,0.15)] flex flex-col lg:flex-row justify-between items-center gap-4">
       <div class="flex items-center gap-4 w-full lg:w-auto">
-        <!-- Retro MSN Avatar frame -->
         <div onclick="playCrestFreq()" class="w-14 h-14 border-2 border-neonPink flex items-center justify-center rounded bg-white overflow-hidden cursor-pointer hover:scale-105 transition-transform relative group">
           <span class="absolute -top-1 -right-1 text-xs animate-bounce z-20">✨</span>
-          
-          <!-- Logo Image Source -->
           <img src="Screenshot_20260530-134321.png" alt="Jupiter Logo" class="object-cover w-full h-full relative z-10" onerror="this.style.display='none'; document.getElementById('header-avatar-fallback').classList.remove('hidden');">
-          <!-- Fallback -->
           <div id="header-avatar-fallback" class="hidden absolute inset-0 bg-retroBlack flex items-center justify-center text-xl group-hover:animate-spin">🪐</div>
         </div>
         <div class="font-mono text-xs">
           <div class="flex items-center gap-2">
             <span class="w-2.5 h-2.5 bg-forestGreen rounded-full inline-block border border-white animate-pulse"></span>
-            <span class="text-white font-bold text-sm">Jayme // Jupiter's Emporium</span>
+            <span class="text-white font-bold text-sm tracking-wide">Jayme // Jupiter's Emporium</span>
           </div>
           <div class="text-neonPink mt-1 glow-pink-text">
             "~*~ Blessed Be ~*~ Status: <span id="current-track-name" class="underline">Jukebox Offline</span>"
@@ -138,72 +131,111 @@
         </div>
       </div>
 
-      <!-- Navigation & Whimsical Audio Jukebox Control Block -->
       <div class="flex flex-col md:flex-row items-center gap-4 w-full lg:w-auto justify-end">
-        
-        <!-- COSMIC JUKEBOX CONSOLE -->
         <div class="flex flex-col gap-1.5 bg-retroBlack border border-mysticGold/40 p-2.5 rounded text-[10px] font-mono w-full md:w-auto">
           <div class="flex justify-between items-center border-b border-mysticGold/15 pb-1">
             <span class="text-mysticGold font-bold">🔮 COSMIC_JUKEBOX_v1.0</span>
-            <!-- Retro ASCII visualizer -->
             <div id="visualizer-box" class="flex gap-0.5 items-end h-3 px-1">
-              <div class="viz-bar"></div>
-              <div class="viz-bar"></div>
-              <div class="viz-bar"></div>
-              <div class="viz-bar"></div>
+              <div class="viz-bar"></div><div class="viz-bar"></div><div class="viz-bar"></div><div class="viz-bar"></div>
             </div>
           </div>
-          
           <div class="flex flex-wrap gap-1.5 mt-1 items-center">
-            <button onclick="playTrack('hum')" id="btn-track-hum" class="track-btn px-2 py-1 border border-mysticGold/30 text-mysticGold rounded hover:border-neonPink hover:text-neonPink transition-colors">
-              [ Drone ]
-            </button>
-            <button onclick="playTrack('pink')" id="btn-track-pink" class="track-btn px-2 py-1 border border-mysticGold/30 text-mysticGold rounded hover:border-neonPink hover:text-neonPink transition-colors">
-              [ Pink Noise ]
-            </button>
-            <button onclick="playTrack('lullaby')" id="btn-track-lullaby" class="track-btn px-2 py-1 border border-mysticGold/30 text-mysticGold rounded hover:border-neonPink hover:text-neonPink transition-colors">
-              [ Astral Synth ]
-            </button>
-            <button onclick="stopJukebox()" id="btn-track-stop" class="px-2 py-1 border border-red-500/50 text-red-400 rounded hover:bg-red-500/15 transition-colors">
-              MUTE 🔇
-            </button>
+            <button onclick="playTrack('hum')" id="btn-track-hum" class="track-btn px-2 py-1 border border-mysticGold/30 text-mysticGold rounded hover:border-neonPink hover:text-neonPink transition-colors">[ Drone ]</button>
+            <button onclick="playTrack('pink')" id="btn-track-pink" class="track-btn px-2 py-1 border border-mysticGold/30 text-mysticGold rounded hover:border-neonPink hover:text-neonPink transition-colors">[ Pink Noise ]</button>
+            <button onclick="playTrack('lullaby')" id="btn-track-lullaby" class="track-btn px-2 py-1 border border-mysticGold/30 text-mysticGold rounded hover:border-neonPink hover:text-neonPink transition-colors">[ Astral Synth ]</button>
+            <button onclick="stopJukebox()" id="btn-track-stop" class="px-2 py-1 border border-red-500/50 text-red-400 rounded hover:bg-red-500/15 transition-colors">MUTE 🔇</button>
           </div>
-
           <div class="flex items-center gap-2 justify-between mt-1 text-[9px] text-gray-500">
             <span>VOLUME:</span>
             <input type="range" id="audio-volume" min="0" max="0.3" step="0.01" value="0.06" oninput="adjustVolume(this.value)" class="w-20 accent-neonPink bg-retroDark cursor-pointer">
           </div>
         </div>
-
-        <nav class="flex flex-wrap gap-2 font-mono text-xs">
-          <button onclick="switchTab('terminal')" id="nav-terminal" class="nav-btn px-3 py-1.5 border-2 border-neonPink text-neonPink bg-retroBlack rounded transition-all">
-            [ ABOUT_ME ]
-          </button>
-          <button onclick="switchTab('studio')" id="nav-studio" class="nav-btn px-3 py-1.5 border border-mysticGold/40 text-mysticGold bg-retroBlack rounded transition-all">
-            [ THE_STUDIO ]
-          </button>
-          <button onclick="switchTab('workshops')" id="nav-workshops" class="nav-btn px-3 py-1.5 border border-mysticGold/40 text-mysticGold bg-retroBlack rounded transition-all">
-            [ WORKSHOPS ]
-          </button>
-          <button onclick="switchTab('shop')" id="nav-shop" class="nav-btn px-3 py-1.5 border border-mysticGold/40 text-mysticGold bg-retroBlack rounded transition-all">
-            [ THE_VAULT ]
-          </button>
-          <button onclick="switchTab('coordinates')" id="nav-coordinates" class="nav-btn px-3 py-1.5 border border-mysticGold/40 text-mysticGold bg-retroBlack rounded transition-all">
-            [ SIGN_GUESTBOOK ]
-          </button>
-        </nav>
       </div>
-    </div>
+    </header>
 
-    <!-- MAIN DISPLAY TERMINAL -->
+    <nav class="sticky top-2 z-40 bg-retroBlack/90 backdrop-blur-md border border-mysticGold/40 rounded shadow-[0_8px_30px_rgba(0,0,0,0.6)] mb-8 px-2 py-2 flex justify-center gap-2 md:gap-6 font-mono text-xs md:text-sm overflow-x-auto">
+      <button onclick="switchTab('home')" id="nav-home" class="nav-btn nav-active px-4 py-2 border-b-2 border-transparent text-mysticGold hover:text-neonPink hover:border-neonPink transition-all uppercase tracking-widest font-bold whitespace-nowrap">
+        [ THE_PORTAL ]
+      </button>
+      <button onclick="switchTab('shop')" id="nav-shop" class="nav-btn px-4 py-2 border-b-2 border-transparent text-mysticGold hover:text-neonPink hover:border-neonPink transition-all uppercase tracking-widest font-bold whitespace-nowrap">
+        [ THE_VAULT ]
+      </button>
+      <button onclick="switchTab('studio')" id="nav-studio" class="nav-btn px-4 py-2 border-b-2 border-transparent text-mysticGold hover:text-neonPink hover:border-neonPink transition-all uppercase tracking-widest font-bold whitespace-nowrap">
+        [ LOOKBOOK_STUDIO ]
+      </button>
+      <button onclick="switchTab('terminal')" id="nav-terminal" class="nav-btn px-4 py-2 border-b-2 border-transparent text-mysticGold hover:text-neonPink hover:border-neonPink transition-all uppercase tracking-widest font-bold whitespace-nowrap">
+        [ ABOUT_JAYME ]
+      </button>
+      <button onclick="switchTab('coordinates')" id="nav-coordinates" class="nav-btn px-4 py-2 border-b-2 border-transparent text-mysticGold hover:text-neonPink hover:border-neonPink transition-all uppercase tracking-widest font-bold whitespace-nowrap">
+        [ GUESTBOOK ]
+      </button>
+    </nav>
+
+    <!-- MAIN CONTENT GRID -->
     <main class="flex-grow grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
       
       <!-- LEFT MODULE: The Workspace Window (8 Columns) -->
       <section class="lg:col-span-8 flex flex-col gap-8">
         
+        <!-- TAB 00_HOME (The Portal Landing Page) -->
+        <div id="tab-home" class="tab-pane bg-retroDark/95 rounded relative overflow-hidden border border-mysticGold/20 shadow-lg">
+          <!-- Window title bar -->
+          <div class="bg-gradient-to-r from-neonPink to-retroBlack px-4 py-2 flex justify-between items-center text-xs font-mono border-b border-mysticGold/30">
+            <span class="font-bold text-white flex items-center gap-1">🌐 EMPORIUM_MAIN.EXE</span>
+            <div class="flex gap-1.5">
+              <span class="w-3 h-3 bg-mysticGold/20 rounded-full border border-mysticGold flex items-center justify-center text-[8px]">_</span>
+              <span class="w-3 h-3 bg-mysticGold/20 rounded-full border border-mysticGold flex items-center justify-center text-[8px]">□</span>
+              <span class="w-3 h-3 bg-neonPink/20 rounded-full border border-neonPink flex items-center justify-center text-[8px]">X</span>
+            </div>
+          </div>
+
+          <div class="p-6 md:p-10 flex flex-col items-center text-center">
+            <!-- Hero Section -->
+            <div class="animate-float mb-8">
+              <div class="w-24 h-24 md:w-32 md:h-32 mx-auto border-2 border-neonPink rounded-full flex items-center justify-center bg-retroBlack shadow-[0_0_30px_rgba(255,0,127,0.4)] relative">
+                <span class="text-4xl md:text-5xl absolute z-10">🪐</span>
+                <div class="absolute inset-0 border-2 border-mysticGold rounded-full animate-ping opacity-20"></div>
+              </div>
+            </div>
+            
+            <h1 class="text-3xl md:text-4xl font-bold text-white mb-4 tracking-tight">
+              Enter the <span class="glow-pink-text">Cosmic</span> Atelier
+            </h1>
+            <p class="text-gray-400 font-mono text-xs md:text-sm max-w-lg mx-auto leading-relaxed mb-8">
+              Welcome to a curated intersection of Nostalgia and Magic. Explore handloomed garments, vibrant crystal nodes, and custom crochet artifacts straight from the Glastonbury grid.
+            </p>
+
+            <!-- Quick Action Portals -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-2xl mb-10">
+              <div onclick="switchTab('shop')" class="retro-dashed-gold bg-retroBlack/80 p-5 rounded cursor-pointer group hover:bg-mysticGold/10 transition-colors">
+                <h3 class="text-mysticGold font-mono font-bold text-sm mb-2 group-hover:glow-gold-text">👜 BROWSE THE VAULT</h3>
+                <p class="text-[10px] text-gray-500 font-mono">Access our catalog of incense, crystals, and ready-to-wear magic.</p>
+              </div>
+              <div onclick="switchTab('studio')" class="retro-dashed-pink bg-retroBlack/80 p-5 rounded cursor-pointer group hover:bg-neonPink/10 transition-colors">
+                <h3 class="text-neonPink font-mono font-bold text-sm mb-2 group-hover:glow-pink-text">✨ ENTER THE STUDIO</h3>
+                <p class="text-[10px] text-gray-500 font-mono">Use our interactive avatar to build your custom alchemical outfit.</p>
+              </div>
+            </div>
+
+            <!-- Featured Item Strip -->
+            <div class="w-full max-w-2xl text-left border border-mysticGold/20 bg-retroBlack p-4 rounded flex flex-col sm:flex-row items-center gap-4 relative overflow-hidden">
+              <div class="absolute top-0 right-0 bg-neonPink text-white text-[8px] font-mono font-bold px-2 py-1 uppercase rounded-bl">Latest Drop</div>
+              <div class="w-16 h-16 bg-retroDark border border-mysticGold/30 flex items-center justify-center rounded shrink-0">
+                <span class="text-2xl">🧶</span>
+              </div>
+              <div class="flex-grow">
+                <h4 class="text-white font-bold text-sm">Amethyst Knit Wrap Shrug</h4>
+                <p class="text-[10px] text-gray-500 font-mono mt-1">Our latest creation infused with protective stones.</p>
+              </div>
+              <button onclick="addToCart('Amethyst Knit Wrap Shrug', 78.00); writeDiagnosticLog('Featured item acquired from Portal.')" class="bg-mysticGold text-retroBlack font-bold font-mono text-xs px-4 py-2 hover:bg-white transition-colors shrink-0 whitespace-nowrap">
+                ADD TO CART
+              </button>
+            </div>
+          </div>
+        </div>
+
         <!-- TAB 01_ABOUT_ME (MSN Profile & Space Bio) -->
-        <div id="tab-terminal" class="tab-pane bg-retroDark/95 rounded relative overflow-hidden">
-          <!-- MSN style window title bar -->
+        <div id="tab-terminal" class="tab-pane hidden bg-retroDark/95 rounded relative overflow-hidden border border-mysticGold/20">
           <div class="bg-gradient-to-r from-neonPink to-retroBlack px-4 py-2 flex justify-between items-center text-xs font-mono border-b border-mysticGold/30">
             <span class="font-bold text-white flex items-center gap-1">🔮 JUPITER_PROFILE.EXE</span>
             <div class="flex gap-1.5">
@@ -215,12 +247,9 @@
 
           <div class="p-6 space-y-6 font-mono text-xs leading-relaxed">
             <div class="flex flex-col sm:flex-row gap-6 border-b border-mysticGold/20 pb-6">
-              <!-- Retro Profile Photo Sticker Box (Polaroid design) -->
               <div class="w-24 h-24 bg-white p-1 rounded-sm shadow-md flex-shrink-0 flex items-center justify-center relative overflow-hidden group hover:rotate-3 transition-transform">
                 <img src="Screenshot_20260530-134321.png" alt="Jayme Polaroid Logo" class="object-contain w-full h-full relative z-10" onerror="this.style.display='none'; document.getElementById('polaroid-avatar-fallback').classList.remove('hidden');">
-                <!-- Fallback -->
                 <div id="polaroid-avatar-fallback" class="hidden absolute inset-0 bg-retroBlack flex flex-col items-center justify-center text-3xl">🧙‍♀️</div>
-                
                 <div class="absolute -bottom-1 -right-1 bg-neonPink text-white text-[8px] px-1 font-mono rounded z-20">LVL.99</div>
               </div>
               <div class="space-y-2">
@@ -228,7 +257,7 @@
                   <span>✨ Welcome to Jayme's Alchemical Vault! ✨</span>
                 </h3>
                 <p class="text-gray-400 text-[11px]">
-                  "Mixing Nepalese handlooms with glowing custom crochet stitches, direct high-altitude Himalayan incense, and vibrant crystal nodes. Virtual aligned."
+                  "Mixing Nepalese handlooms with glowing custom crochet stitches, direct high-altitude Himalayan incense, and vibrant crystal nodes. Glastonbury aligned."
                 </p>
                 <div class="flex flex-wrap gap-2 pt-1 text-[10px]">
                   <span class="bg-neonPink/10 text-neonPink border border-neonPink/30 px-2 py-0.5 rounded">#Web1.0</span>
@@ -238,7 +267,6 @@
               </div>
             </div>
 
-            <!-- MySpace Style Top Friends/Influences Grid -->
             <div class="space-y-3">
               <h4 class="text-xs text-neonPink uppercase font-bold tracking-wider">// JAYME'S PLANETARY ANCHORS (TOP FRIENDS)</h4>
               <div class="grid grid-cols-4 gap-2">
@@ -252,7 +280,7 @@
                 </div>
                 <div class="bg-retroBlack border border-mysticGold/20 p-2 rounded text-center group hover:border-neonPink transition-colors">
                   <div class="text-xl mb-1">🧶</div>
-                  <div class="text-[9px] text-gray-400 truncate font-mono">The Studio</div>
+                  <div class="text-[9px] text-gray-400 truncate font-mono">Glastonbury</div>
                 </div>
                 <div class="bg-retroBlack border border-mysticGold/20 p-2 rounded text-center group hover:border-neonPink transition-colors">
                   <div class="text-xl mb-1">🏔</div>
@@ -260,14 +288,11 @@
                 </div>
               </div>
             </div>
-
           </div>
         </div>
 
-
         <!-- TAB 02_VIRTUAL_STUDIO (Interactive Dressing Lookbook) -->
-        <div id="tab-studio" class="tab-pane hidden bg-retroDark/95 rounded relative overflow-hidden">
-          <!-- Window title bar -->
+        <div id="tab-studio" class="tab-pane hidden bg-retroDark/95 rounded relative overflow-hidden border border-mysticGold/20">
           <div class="bg-gradient-to-r from-neonPink to-retroBlack px-4 py-2 flex justify-between items-center text-xs font-mono border-b border-mysticGold/30">
             <span class="font-bold text-white flex items-center gap-1">✨ LOOKBOOK_STUDIO.EXE</span>
             <div class="flex gap-1.5">
@@ -278,21 +303,16 @@
           </div>
 
           <div class="p-6 flex flex-col md:flex-row gap-6">
-            
-            <!-- Fitting Room Display (SVG Model Base Layer) -->
             <div class="w-full md:w-1/2 flex flex-col items-center">
               <div id="studio-backdrop" class="relative w-full aspect-[4/5] bg-retroBlack retro-dashed-pink rounded overflow-hidden flex items-center justify-center">
-                <!-- Retro Grid Lines and Decals -->
                 <span class="absolute top-2 left-3 text-[9px] font-mono text-neonPink/60 tracking-widest">COSMIC GRID COORDINATES</span>
                 <span id="active-model-id" class="absolute bottom-2 right-3 text-[9px] font-mono text-mysticGold">MODEL: ARIA_01</span>
                 
-                <!-- Dynamic SVG Vector Model Canvas -->
                 <svg id="svg-model-container" class="w-full h-full max-h-[420px] p-4 relative z-10" viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <!-- Starry Guideline Accents inside Silhouette -->
                   <circle cx="50" cy="60" r="45" stroke="rgba(212,175,55,0.08)" stroke-width="0.5" />
                   <line x1="50" y1="0" x2="50" y2="120" stroke="rgba(212,175,55,0.1)" stroke-dasharray="2 2" />
 
-                  <!-- ARIA SILHOUETTE (Model 1) -->
+                  <!-- Models & Clothing -->
                   <g id="model-aria-body">
                     <circle cx="50" cy="20" r="7.5" fill="#cca41a" fill-opacity="0.25" stroke="#cca41a" stroke-width="0.75" />
                     <rect x="48.5" y="27.5" width="3" height="6" fill="#cca41a" fill-opacity="0.25" stroke="#cca41a" stroke-width="0.75" />
@@ -303,7 +323,6 @@
                     <path d="M61 37 L71 62" stroke="#cca41a" stroke-width="1" stroke-linecap="round" stroke-opacity="0.4" />
                   </g>
 
-                  <!-- ROWAN SILHOUETTE (Model 2) -->
                   <g id="model-rowan-body" class="hidden">
                     <circle cx="50" cy="19" r="8" fill="#ff007f" fill-opacity="0.25" stroke="#ff007f" stroke-width="0.75" />
                     <rect x="48" y="27" width="4" height="6.5" fill="#ff007f" fill-opacity="0.25" stroke="#ff007f" stroke-width="0.75" />
@@ -314,43 +333,35 @@
                     <path d="M63 36 L70 54 L66 70" stroke="#ff007f" stroke-width="1.1" stroke-linecap="round" stroke-opacity="0.4" fill="none" />
                   </g>
 
-                  <!-- CLOTHING LAYERS -->
-                  
-                  <!-- Crop Top Layer -->
                   <g id="svg-crop-top" class="hidden">
                     <path d="M37.5 37.5 C37.5 37.5, 39.5 54.5, 43.5 54.5 L56.5 54.5 C60.5 54.5, 62.5 37.5, 62.5 37.5 L53.5 35.5 L46.5 35.5 Z" fill="#ff007f" fill-opacity="0.85" stroke="#ffffff" stroke-width="0.75" />
                     <circle cx="50" cy="45" r="2.5" stroke="#cca41a" stroke-width="0.5" fill="none" />
                     <line x1="43.5" y1="46" x2="56.5" y2="46" stroke="#ffffff" stroke-dasharray="1 1" stroke-width="0.5" />
                   </g>
 
-                  <!-- Knit Shrug Layer -->
                   <g id="svg-knit-shrug" class="hidden">
                     <path d="M29 37 L38 34.5 L50 37.5 L62 34.5 L71 37 L73 44 L63 42 L58 44.5 L42 44.5 L37 42 L27 44 Z" fill="#ff007f" fill-opacity="0.7" stroke="#ff007f" stroke-width="1" />
                     <path d="M27 44 L19 61 L23 63 L31 44 Z" fill="#ff007f" fill-opacity="0.85" stroke="#ffffff" stroke-width="0.5" />
                     <path d="M71 44 L79 61 L75 63 L67 44 Z" fill="#ff007f" fill-opacity="0.85" stroke="#ffffff" stroke-width="0.5" />
                   </g>
 
-                  <!-- Harem Pants Layer -->
                   <g id="svg-harem-pants" class="hidden">
                     <path d="M43.5 71 L56.5 71 L63 81 L59 107 L50 91 L41 107 L37 81 Z" fill="#cca41a" fill-opacity="0.8" stroke="#ff007f" stroke-width="1" />
                     <path d="M45.5 75 Q50 85 54.5 75" stroke="#050505" stroke-width="0.75" fill="none" />
                     <path d="M41.5 81 Q50 94 58.5 81" stroke="#050505" stroke-width="0.75" fill="none" />
                   </g>
 
-                  <!-- Patchwork Skirt Layer -->
                   <g id="svg-patchwork-skirt" class="hidden">
                     <path d="M43.5 71 L56.5 71 L67 104 L33 104 Z" fill="#ff007f" fill-opacity="0.6" stroke="#cca41a" stroke-width="1" />
                     <rect x="41" y="78" width="8" height="8" fill="#cca41a" fill-opacity="0.4" stroke="#cca41a" stroke-width="0.5" />
                     <circle cx="53" cy="88" r="4.5" fill="#050505" stroke="#ff007f" stroke-width="0.5" />
                   </g>
 
-                  <!-- Crystal Talisman Layer -->
                   <g id="svg-crystal-talisman" class="hidden">
                     <path d="M44.5 27.5 Q50 37.5 55.5 27.5" stroke="#cca41a" stroke-width="0.75" fill="none" />
                     <polygon points="50,37.5 48,42 50,46.5 52,42" fill="#ff007f" stroke="#ffffff" stroke-width="0.5" />
                   </g>
 
-                  <!-- Hooded Void Cloak Layer -->
                   <g id="svg-void-cloak" class="hidden">
                     <path d="M34 32 C34 32, 22 75, 18 114 L36 114 L50 85 L64 114 L82 114 C78 75, 66 32, 66 32 Z" fill="#121216" fill-opacity="0.95" stroke="#cca41a" stroke-width="1" />
                     <path d="M38 31 C38 18, 62 18, 62 31 L58 35 L42 35 Z" fill="#202026" stroke="#ff007f" stroke-width="0.75" />
@@ -358,17 +369,14 @@
                 </svg>
               </div>
 
-              <!-- Live Outfit Valuation Output -->
               <div class="mt-4 w-full bg-retroBlack border border-mysticGold/30 p-3 rounded flex justify-between items-center text-xs font-mono">
                 <span class="text-gray-400">Total Price:</span>
                 <span id="studio-valuation-badge" class="text-mysticGold font-bold text-base glow-gold-text">$0.00</span>
               </div>
             </div>
 
-            <!-- Wardrobe Options Sidebar -->
             <div class="w-full md:w-1/2 flex flex-col justify-between font-mono text-[11px]">
               <div>
-                <!-- Model Selector buttons with whimsical profiles -->
                 <div class="mb-5">
                   <h4 class="text-gray-400 uppercase tracking-wider mb-2">// CHOOSE YOUR AVATAR PROFILE</h4>
                   <div class="grid grid-cols-2 gap-2">
@@ -384,7 +392,6 @@
                 <h3 class="text-neonPink uppercase tracking-wider mb-3">✦ EQUIPPABLE ARTIFACTS ✦</h3>
                 
                 <div class="space-y-3">
-                  <!-- Tops Category -->
                   <div>
                     <h4 class="text-gray-500 uppercase tracking-widest mb-1.5 font-bold">01_TOPS</h4>
                     <div class="grid grid-cols-2 gap-2">
@@ -399,7 +406,6 @@
                     </div>
                   </div>
 
-                  <!-- Bottoms Category -->
                   <div>
                     <h4 class="text-gray-500 uppercase tracking-widest mb-1.5 font-bold">02_BOTTOMS</h4>
                     <div class="grid grid-cols-2 gap-2">
@@ -414,7 +420,6 @@
                     </div>
                   </div>
 
-                  <!-- Outerwear Category -->
                   <div>
                     <h4 class="text-gray-500 uppercase tracking-widest mb-1.5 font-bold">03_OUTERWEAR</h4>
                     <button onclick="toggleWearable('cloak', 'void-cloak', 110.00)" id="btn-void-cloak" class="wearable-btn w-full text-left p-2 border border-mysticGold/25 bg-retroBlack rounded hover:border-neonPink transition-all flex justify-between items-center h-10">
@@ -423,7 +428,6 @@
                     </button>
                   </div>
 
-                  <!-- Accessories Category -->
                   <div>
                     <h4 class="text-gray-500 uppercase tracking-widest mb-1.5 font-bold">04_TALISMANS</h4>
                     <button onclick="toggleWearable('accessory', 'crystal-talisman', 28.00)" id="btn-crystal-talisman" class="wearable-btn w-full text-left p-2 border border-mysticGold/25 bg-retroBlack rounded hover:border-neonPink transition-all flex justify-between items-center h-10">
@@ -434,63 +438,17 @@
                 </div>
               </div>
 
-              <!-- Checkout action button -->
               <div class="mt-5">
                 <button onclick="addOutfitToCart()" class="w-full bg-neonPink hover:bg-neonPink/80 text-white font-bold p-3 rounded uppercase tracking-widest transition-all shadow-[0_0_12px_rgba(255,0,127,0.4)]">
                   Add This Look to Cart
                 </button>
-              </div>
-
-            </div>
-
-          </div>
-        </div>
-
-        <!-- TAB 02.5_WORKSHOPS (New Workshops Pane) -->
-        <div id="tab-workshops" class="tab-pane hidden bg-retroDark/95 rounded relative overflow-hidden">
-          <div class="bg-gradient-to-r from-neonPink to-retroBlack px-4 py-2 flex justify-between items-center text-xs font-mono border-b border-mysticGold/30">
-            <span class="font-bold text-white flex items-center gap-1">🛠 WORKSHOPS_OFFERING.EXE</span>
-            <div class="flex gap-1.5">
-              <span class="w-3 h-3 bg-mysticGold/20 rounded-full border border-mysticGold flex items-center justify-center text-[8px]">_</span>
-              <span class="w-3 h-3 bg-mysticGold/20 rounded-full border border-mysticGold flex items-center justify-center text-[8px]">□</span>
-              <span class="w-3 h-3 bg-neonPink/20 rounded-full border border-neonPink flex items-center justify-center text-[8px]">X</span>
-            </div>
-          </div>
-          <div class="p-6 space-y-6 font-mono text-xs leading-relaxed">
-            <div class="border-b border-mysticGold/20 pb-6">
-              <h3 class="text-sm font-bold text-mysticGold mb-2">✦ ALCHEMICAL CRAFTING SESSIONS ✦</h3>
-              <p class="text-gray-400 text-[11px]">"Join our live stream transmission cycles. Each workshop is a deep dive into the practical magic of fiber arts, crystalline resonance, and ancestral incense traditions."</p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div class="retro-dashed-pink bg-retroBlack p-4 rounded flex flex-col justify-between hover:border-mysticGold transition-colors">
-                <div>
-                  <span class="text-[8px] text-neonPink block uppercase font-bold tracking-widest mb-1">// FIBER_ARTS</span>
-                  <h4 class="text-white font-bold text-sm mb-2">Intro to Celestial Crochet</h4>
-                  <p class="text-[10px] text-gray-500 mb-4">Learn basic loops, custom stitching, and how to crochet your own cosmic shrug.</p>
-                </div>
-                <div class="flex items-center justify-between">
-                  <span class="text-mysticGold">$45.00</span>
-                  <button onclick="writeDiagnosticLog('Workshop request triggered: Crochet Session')" class="bg-retroDark border border-neonPink text-neonPink px-3 py-1 text-[10px] uppercase hover:bg-neonPink hover:text-white transition-all">[ REQUEST_SPOT ]</button>
-                </div>
-              </div>
-              <div class="retro-dashed-gold bg-retroBlack p-4 rounded flex flex-col justify-between hover:border-neonPink transition-colors">
-                <div>
-                  <span class="text-[8px] text-mysticGold block uppercase font-bold tracking-widest mb-1">// CRYSTAL_MASTERY</span>
-                  <h4 class="text-white font-bold text-sm mb-2">Crystal Resonance Lab</h4>
-                  <p class="text-[10px] text-gray-500 mb-4">Deep dive into cleansing, programming, and activating your personal crystal grid.</p>
-                </div>
-                <div class="flex items-center justify-between">
-                  <span class="text-mysticGold">$35.00</span>
-                  <button onclick="writeDiagnosticLog('Workshop request triggered: Crystal Lab')" class="bg-retroDark border border-mysticGold text-mysticGold px-3 py-1 text-[10px] uppercase hover:bg-mysticGold hover:text-retroBlack transition-all">[ REQUEST_SPOT ]</button>
-                </div>
               </div>
             </div>
           </div>
         </div>
 
         <!-- TAB 03_THE_VAULT (Expanded E-Commerce Grid) -->
-        <div id="tab-shop" class="tab-pane hidden bg-retroDark/95 rounded relative overflow-hidden">
-          <!-- Window title bar -->
+        <div id="tab-shop" class="tab-pane hidden bg-retroDark/95 rounded relative overflow-hidden border border-mysticGold/20">
           <div class="bg-gradient-to-r from-neonPink to-retroBlack px-4 py-2 flex justify-between items-center text-xs font-mono border-b border-mysticGold/30">
             <span class="font-bold text-white flex items-center gap-1">👜 ALCHEMIST_SHOP.EXE</span>
             <div class="flex gap-1.5">
@@ -503,8 +461,6 @@
           <div class="p-6">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-mysticGold/20 pb-4 mb-4 font-mono text-xs">
               <h2 class="text-mysticGold font-bold text-sm tracking-wider">// ARCHIVED VAULT INDEX</h2>
-              
-              <!-- Filter Selectors -->
               <div class="flex flex-wrap gap-1">
                 <button onclick="filterVault('all')" id="filter-all" class="filter-btn px-2 py-0.5 border border-neonPink text-neonPink rounded bg-retroBlack transition-all">ALL</button>
                 <button onclick="filterVault('crochet')" id="filter-crochet" class="filter-btn px-2 py-0.5 border border-mysticGold/30 text-mysticGold rounded hover:border-neonPink transition-all">CROCHET</button>
@@ -513,19 +469,14 @@
               </div>
             </div>
 
-            <!-- Dynamic Search -->
             <div class="mb-4 relative font-mono text-xs">
               <input type="text" id="vault-search" placeholder="Search product file catalog..." oninput="searchVault(this.value)" class="w-full bg-retroBlack border border-mysticGold/30 rounded p-2 pl-8 text-white outline-none focus:border-neonPink transition-colors">
               <div class="absolute left-2.5 top-2.5">🔍</div>
             </div>
 
-            <!-- Vault Cards -->
             <div id="vault-items-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4 font-mono text-xs">
               
-              <!-- Card 1 -->
-              <div class="vault-card border border-mysticGold/30 bg-retroBlack p-3 rounded flex flex-col justify-between hover:border-neonPink transition-colors" data-category="nepalese" data-name="himalayan cedarwood incense">
-                <!-- IMAGE PLACEHOLDER -->
-                <img src="path/to/cedarwood.webp" alt="Himalayan Cedarwood Incense" class="w-full h-32 object-cover rounded mb-2 border border-mysticGold/20">
+              <div class="vault-card border border-mysticGold/30 bg-retroBlack p-3 rounded flex flex-col justify-between hover:border-neonPink transition-colors shadow-sm" data-category="nepalese" data-name="himalayan cedarwood incense">
                 <div class="flex justify-between items-start mb-2">
                   <div>
                     <span class="text-[8px] text-neonPink block uppercase">INCENSE // RES01</span>
@@ -535,17 +486,12 @@
                 </div>
                 <p class="text-[10px] text-gray-400 mb-3">Piney ritual incense rolled responsibly in the valleys of Nepal.</p>
                 <div class="flex gap-1">
-                  <button onclick="addToCart('Himalayan Cedarwood Incense', 18.00)" class="flex-grow bg-retroDark border border-mysticGold/30 text-mysticGold hover:border-neonPink hover:text-neonPink py-1 text-[10px] transition-colors">
-                    Acquire Item_
-                  </button>
+                  <button onclick="addToCart('Himalayan Cedarwood Incense', 18.00)" class="flex-grow bg-retroDark border border-mysticGold/30 text-mysticGold hover:border-neonPink hover:text-neonPink py-1 text-[10px] transition-colors">Acquire Item_</button>
                   <button onclick="openInspectModal('ins01')" class="px-2 border border-mysticGold/10 text-gray-500 hover:text-mysticGold">[ INSPECT ]</button>
                 </div>
               </div>
 
-              <!-- Card 2 -->
-              <div class="vault-card border border-mysticGold/30 bg-retroBlack p-3 rounded flex flex-col justify-between hover:border-neonPink transition-colors" data-category="crystals" data-name="raw citrine cluster">
-                 <!-- IMAGE PLACEHOLDER -->
-                <img src="path/to/citrine.webp" alt="Raw Citrine Cluster" class="w-full h-32 object-cover rounded mb-2 border border-mysticGold/20">
+              <div class="vault-card border border-mysticGold/30 bg-retroBlack p-3 rounded flex flex-col justify-between hover:border-neonPink transition-colors shadow-sm" data-category="crystals" data-name="raw citrine cluster">
                 <div class="flex justify-between items-start mb-2">
                   <div>
                     <span class="text-[8px] text-neonPink block uppercase">CRYSTALS // CITR9</span>
@@ -555,15 +501,12 @@
                 </div>
                 <p class="text-[10px] text-gray-400 mb-3">Uncut energetic amplifier aligned with abundance currents.</p>
                 <div class="flex gap-1">
-                  <button onclick="addToCart('Raw Citrine Cluster', 32.00)" class="flex-grow bg-retroDark border border-mysticGold/30 text-mysticGold hover:border-neonPink hover:text-neonPink py-1 text-[10px] transition-colors">
-                    Acquire Item_
-                  </button>
+                  <button onclick="addToCart('Raw Citrine Cluster', 32.00)" class="flex-grow bg-retroDark border border-mysticGold/30 text-mysticGold hover:border-neonPink hover:text-neonPink py-1 text-[10px] transition-colors">Acquire Item_</button>
                   <button onclick="openInspectModal('cr09')" class="px-2 border border-mysticGold/10 text-gray-500 hover:text-mysticGold">[ INSPECT ]</button>
                 </div>
               </div>
 
-              <!-- Card 3 -->
-              <div class="vault-card border border-mysticGold/30 bg-retroBlack p-3 rounded flex flex-col justify-between hover:border-neonPink transition-colors" data-category="crystals" data-name="black obsidian scrying mirror">
+              <div class="vault-card border border-mysticGold/30 bg-retroBlack p-3 rounded flex flex-col justify-between hover:border-neonPink transition-colors shadow-sm" data-category="crystals" data-name="black obsidian scrying mirror">
                 <div class="flex justify-between items-start mb-2">
                   <div>
                     <span class="text-[8px] text-neonPink block uppercase">ALCHEMIC // MIR04</span>
@@ -573,15 +516,12 @@
                 </div>
                 <p class="text-[10px] text-gray-400 mb-3">Highly polished dark glass designed for meditation and shadow-work.</p>
                 <div class="flex gap-1">
-                  <button onclick="addToCart('Black Obsidian Mirror', 45.00)" class="flex-grow bg-retroDark border border-mysticGold/30 text-mysticGold hover:border-neonPink hover:text-neonPink py-1 text-[10px] transition-colors">
-                    Acquire Item_
-                  </button>
+                  <button onclick="addToCart('Black Obsidian Mirror', 45.00)" class="flex-grow bg-retroDark border border-mysticGold/30 text-mysticGold hover:border-neonPink hover:text-neonPink py-1 text-[10px] transition-colors">Acquire Item_</button>
                   <button onclick="openInspectModal('bo04')" class="px-2 border border-mysticGold/10 text-gray-500 hover:text-mysticGold">[ INSPECT ]</button>
                 </div>
               </div>
 
-              <!-- Card 4 -->
-              <div class="vault-card border border-mysticGold/30 bg-retroBlack p-3 rounded flex flex-col justify-between hover:border-neonPink transition-colors" data-category="crochet" data-name="amethyst knit wrap shrug">
+              <div class="vault-card border border-mysticGold/30 bg-retroBlack p-3 rounded flex flex-col justify-between hover:border-neonPink transition-colors shadow-sm" data-category="crochet" data-name="amethyst knit wrap shrug">
                 <div class="flex justify-between items-start mb-2">
                   <div>
                     <span class="text-[8px] text-neonPink block uppercase">CROCHET // CC02</span>
@@ -591,9 +531,7 @@
                 </div>
                 <p class="text-[10px] text-gray-400 mb-3">Custom crochet knitwear pieces with real amethyst stones sewn in.</p>
                 <div class="flex gap-1">
-                  <button onclick="addToCart('Amethyst Knit Wrap Shrug', 78.00)" class="flex-grow bg-retroDark border border-mysticGold/30 text-mysticGold hover:border-neonPink hover:text-neonPink py-1 text-[10px] transition-colors">
-                    Acquire Item_
-                  </button>
+                  <button onclick="addToCart('Amethyst Knit Wrap Shrug', 78.00)" class="flex-grow bg-retroDark border border-mysticGold/30 text-mysticGold hover:border-neonPink hover:text-neonPink py-1 text-[10px] transition-colors">Acquire Item_</button>
                   <button onclick="openInspectModal('cc02')" class="px-2 border border-mysticGold/10 text-gray-500 hover:text-mysticGold">[ INSPECT ]</button>
                 </div>
               </div>
@@ -602,9 +540,8 @@
           </div>
         </div>
 
-
         <!-- TAB 04_COORDINATES (Contact / Guestbook Window) -->
-        <div id="tab-coordinates" class="tab-pane hidden bg-retroDark/95 rounded relative overflow-hidden">
+        <div id="tab-coordinates" class="tab-pane hidden bg-retroDark/95 rounded relative overflow-hidden border border-mysticGold/20">
           <div class="bg-gradient-to-r from-neonPink to-retroBlack px-4 py-2 flex justify-between items-center text-xs font-mono border-b border-mysticGold/30">
             <span class="font-bold text-white flex items-center gap-1">📖 CELESTIAL_GUESTBOOK.EXE</span>
             <div class="flex gap-1.5">
@@ -622,17 +559,14 @@
               </p>
               
               <div class="border border-mysticGold/25 p-3 rounded bg-retroBlack space-y-1.5 text-[10px]">
-                <div class="flex justify-between"><span class="text-gray-500">ORIGIN:</span><span class="text-white">Kathmandu / Virtual</span></div>
+                <div class="flex justify-between"><span class="text-gray-500">ORIGIN:</span><span class="text-white">Kathmandu / Glastonbury</span></div>
                 <div class="flex justify-between"><span class="text-gray-500">COORDINATE_LAT:</span><span class="text-white">51.1479° N</span></div>
                 <div class="flex justify-between"><span class="text-gray-500">COORDINATE_LON:</span><span class="text-white">2.7186° W</span></div>
                 <div class="flex justify-between"><span class="text-gray-500">RULER_PLANET:</span><span class="text-neonPink font-bold">Jupiter 🪐</span></div>
               </div>
 
-              <!-- Interactive Alchemical Decoder nested directly inside coordinates pane -->
               <div class="retro-dashed-gold p-4 rounded bg-retroBlack/80">
-                <h4 class="text-[11px] text-mysticGold uppercase font-bold tracking-widest mb-1.5 flex items-center gap-2">
-                  ⚡ [ RETRO ALCHEMICAL DECODER ]
-                </h4>
+                <h4 class="text-[11px] text-mysticGold uppercase font-bold tracking-widest mb-1.5 flex items-center gap-2">⚡ [ RETRO ALCHEMICAL DECODER ]</h4>
                 <p class="text-[9px] text-gray-400 mb-3">Compose coordinates or words into runic symbols to leave in your log entry:</p>
                 <div class="flex gap-2">
                   <input type="text" id="rune-input" placeholder="Type words to translate live..." oninput="encodeRunes(this.value)" class="flex-grow bg-retroDark border border-mysticGold/40 text-neonPink p-2 text-[11px] font-mono outline-none focus:border-neonPink rounded">
@@ -640,14 +574,11 @@
                 </div>
                 <div class="mt-3 p-2.5 bg-retroDark border border-mysticGold/20 rounded min-h-[40px] flex items-center justify-between">
                   <div id="rune-output" class="text-mysticGold text-sm font-bold tracking-widest glow-gold-text">ᛃᚢᛗᛁᛏᛖᚱ</div>
-                  <button onclick="injectRunesToMessage()" class="px-2 py-1 bg-neonPink hover:bg-neonPink/85 text-white text-[9px] font-bold rounded shadow-sm transition-all">
-                    🔮 USE AS SIGNATURE
-                  </button>
+                  <button onclick="injectRunesToMessage()" class="px-2 py-1 bg-neonPink hover:bg-neonPink/85 text-white text-[9px] font-bold rounded shadow-sm transition-all">🔮 USE AS SIGNATURE</button>
                 </div>
               </div>
             </div>
 
-            <!-- Interactive form -->
             <div class="retro-dashed-gold p-4 rounded bg-retroBlack">
               <h4 class="text-mysticGold font-bold uppercase mb-3">// LEAVE A TRANSMISSION</h4>
               <form id="terminal-form" onsubmit="handleFormSubmission(event)" class="space-y-2">
@@ -663,9 +594,7 @@
                   <label class="block text-[9px] text-gray-500 uppercase mb-0.5">Magic Scribbles (Supports Decoded Runes):</label>
                   <textarea id="form-message" required rows="3" placeholder="Blessed Be! Type or use the Alchemical Decoder on the left to inject runes here..." class="w-full bg-retroDark border border-mysticGold/30 text-neonPink p-2 text-xs font-mono outline-none focus:border-neonPink rounded"></textarea>
                 </div>
-                <button type="submit" class="w-full bg-retroBlack border-2 border-mysticGold text-mysticGold hover:border-neonPink hover:text-neonPink py-2 text-[11px] uppercase font-bold transition-all">
-                  Sign Guestbook ✍️
-                </button>
+                <button type="submit" class="w-full bg-retroBlack border-2 border-mysticGold text-mysticGold hover:border-neonPink hover:text-neonPink py-2 text-[11px] uppercase font-bold transition-all">Sign Guestbook ✍️</button>
               </form>
               <div id="form-diagnostics" class="mt-2 text-[10px] text-forestGreen hidden font-bold"></div>
             </div>
@@ -677,12 +606,9 @@
       <!-- RIGHT MODULE: Cart & Terminal Diagnostics (4 Columns) -->
       <aside class="lg:col-span-4 space-y-6">
         
-        <!-- OCCULT CART DRAWER -->
-        <div class="border-2 border-mysticGold bg-retroDark/95 p-5 rounded glow-gold-border flex flex-col justify-between min-h-[400px] relative">
-          <!-- Nostalgic Logo Emblem in Checkout Header Area -->
+        <div class="border-2 border-mysticGold bg-retroDark/95 p-5 rounded glow-gold-border flex flex-col justify-between min-h-[400px] relative shadow-lg">
           <div class="absolute top-1 right-2 w-8 h-8 rounded border border-mysticGold/30 bg-white overflow-hidden p-0.5">
             <img src="Screenshot_20260530-134321.png" alt="Cart Logo" class="object-contain w-full h-full" onerror="this.style.display='none'; document.getElementById('cart-logo-fallback').classList.remove('hidden');">
-            <!-- Fallback -->
             <div id="cart-logo-fallback" class="hidden absolute inset-0 bg-retroBlack flex items-center justify-center text-xs">🪐</div>
           </div>
           
@@ -692,13 +618,11 @@
               <span id="cart-count-badge" class="bg-neonPink text-white text-[10px] px-2 py-0.5 rounded font-mono">0 ITEMS</span>
             </div>
 
-            <!-- Cart Items Container -->
             <div id="cart-items-container" class="space-y-2 max-h-[200px] overflow-y-auto pr-1 font-mono text-xs">
               <p class="text-gray-500 italic text-center py-10">Basket is empty. Select some clothes or look in the vault!</p>
             </div>
           </div>
 
-          <!-- Checkout Metrics -->
           <div class="border-t border-mysticGold/20 pt-3 mt-4 text-[11px] font-mono">
             <div class="flex justify-between text-gray-500 mb-1">
               <span>ESTIMATED WEIGHT:</span>
@@ -709,10 +633,9 @@
               <span id="cart-subtotal" class="text-mysticGold font-bold text-base glow-gold-text">$0.00</span>
             </div>
             
-            <!-- Coupon fields -->
             <div class="flex gap-1 mb-3">
               <input type="text" id="discount-code" placeholder="ENTER CODE..." class="w-full bg-retroBlack border border-mysticGold/30 text-neonPink px-2 py-1 text-[9px] outline-none focus:border-neonPink rounded">
-              <button onclick="applyDiscountCode()" class="px-2 border border-mysticGold/50 text-mysticGold hover:text-neonPink hover:border-neonPink text-[9px] rounded">APPLY</button>
+              <button onclick="applyDiscountCode()" class="px-2 border border-mysticGold/50 text-mysticGold hover:text-neonPink hover:border-neonPink text-[9px] rounded transition-colors">APPLY</button>
             </div>
 
             <button onclick="initiateSecureCheckout()" class="w-full bg-retroBlack border-2 border-mysticGold hover:border-neonPink text-mysticGold hover:text-neonPink py-2 uppercase font-bold tracking-widest transition-all">
@@ -722,13 +645,12 @@
           </div>
         </div>
 
-        <!-- DIALOG STATUS NOTIFICATIONS -->
-        <div class="border border-mysticGold/30 bg-retroBlack p-3 rounded text-[10px] font-mono space-y-2 max-h-[140px] overflow-hidden">
+        <div class="border border-mysticGold/30 bg-retroBlack p-3 rounded text-[10px] font-mono space-y-2 max-h-[140px] overflow-hidden shadow-lg">
           <div class="flex justify-between items-center text-mysticGold border-b border-mysticGold/10 pb-1 mb-1">
             <span>// PORTAL_OUTPUT</span>
             <span class="text-forestGreen animate-pulse font-bold">● FEED ONLINE</span>
           </div>
-          <div id="diagnostic-log" class="space-y-1 text-gray-400 h-[80px] overflow-y-auto pr-1">
+          <div id="diagnostic-log" class="space-y-1 text-gray-400 h-[80px] overflow-y-auto pr-1 scroll-smooth">
             <p class="text-forestGreen font-bold">> Connection established on retro terminal v2.6.0</p>
             <p class="text-gray-500">> Retro canvas starry matrix overlay active.</p>
           </div>
@@ -740,18 +662,10 @@
 
     <!-- FOOTER: Retro 88x31 Badges -->
     <footer class="mt-12 border-t border-mysticGold/20 pt-6 flex flex-col items-center gap-6">
-      
-      <!-- Whimsical Web 1.0 Badges -->
       <div class="flex flex-wrap justify-center gap-2">
-        <div class="border border-mysticGold bg-gradient-to-r from-retroBlack to-retroDark px-2 py-1 text-[9px] font-mono text-mysticGold uppercase tracking-widest rounded flex items-center gap-1.5 shadow-[0_0_6px_rgba(204,164,26,0.2)]">
-          <span>🪐</span> JUPITER ALIGNED
-        </div>
-        <div class="border border-neonPink bg-gradient-to-r from-retroBlack to-retroDark px-2 py-1 text-[9px] font-mono text-neonPink uppercase tracking-widest rounded flex items-center gap-1.5 shadow-[0_0_6px_rgba(255,0,127,0.2)]">
-          <span>🧶</span> JAYME CREATED
-        </div>
-        <div class="border border-forestGreen bg-gradient-to-r from-retroBlack to-retroDark px-2 py-1 text-[9px] font-mono text-forestGreen uppercase tracking-widest rounded flex items-center gap-1.5">
-          <span>🛸</span> MYSPACE COMPATIBLE
-        </div>
+        <div class="border border-mysticGold bg-gradient-to-r from-retroBlack to-retroDark px-2 py-1 text-[9px] font-mono text-mysticGold uppercase tracking-widest rounded flex items-center gap-1.5 shadow-[0_0_6px_rgba(204,164,26,0.2)]"><span>🪐</span> JUPITER ALIGNED</div>
+        <div class="border border-neonPink bg-gradient-to-r from-retroBlack to-retroDark px-2 py-1 text-[9px] font-mono text-neonPink uppercase tracking-widest rounded flex items-center gap-1.5 shadow-[0_0_6px_rgba(255,0,127,0.2)]"><span>🧶</span> JAYME CREATED</div>
+        <div class="border border-forestGreen bg-gradient-to-r from-retroBlack to-retroDark px-2 py-1 text-[9px] font-mono text-forestGreen uppercase tracking-widest rounded flex items-center gap-1.5"><span>🛸</span> MYSPACE COMPATIBLE</div>
       </div>
 
       <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-[9px] font-mono text-gray-500 w-full border-t border-mysticGold/5 pt-4">
@@ -776,7 +690,6 @@
     </div>
   </div>
 
-  <!-- Custom Site Logic & Interaction State Script -->
   <script>
     let audioCtx = null;
     let jukeboxSource = null; 
@@ -1042,17 +955,26 @@
     function switchTab(tabId) {
       playBeep(320, 0.06, 'triangle');
       
+      // Hide all panels
       document.querySelectorAll('.tab-pane').forEach(el => el.classList.add('hidden'));
+      // Show selected panel
       document.getElementById('tab-' + tabId).classList.remove('hidden');
 
+      // Reset all nav buttons
       document.querySelectorAll('.nav-btn').forEach(btn => {
-        btn.className = 'nav-btn px-3 py-1.5 border border-mysticGold/40 text-mysticGold bg-retroBlack rounded transition-all';
+        btn.classList.remove('nav-active', 'border-neonPink');
+        btn.classList.add('border-transparent');
       });
 
+      // Activate selected nav button
       const activeBtn = document.getElementById('nav-' + tabId);
-      activeBtn.className = 'nav-btn px-3 py-1.5 border-2 border-neonPink text-neonPink bg-retroBlack rounded transition-all';
+      if(activeBtn) {
+         activeBtn.classList.remove('border-transparent');
+         activeBtn.classList.add('nav-active');
+      }
 
-      writeDiagnosticLog(`Accessing profile log tab: [${tabId.toUpperCase()}]`);
+      writeDiagnosticLog(`Accessing portal node: [${tabId.toUpperCase()}]`);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function writeDiagnosticLog(message) {
@@ -1105,10 +1027,7 @@
 
     let currentModel = 'aria';
     let studioOutfit = {
-      top: null,
-      bottom: null,
-      cloak: null,
-      accessory: null
+      top: null, bottom: null, cloak: null, accessory: null
     };
 
     function selectModel(modelId) {
@@ -1217,32 +1136,28 @@
         price: "$18.00",
         weight: "0.20 kg",
         materials: "Pine resins, essential cedar extracts",
-        properties: "Gathered organically from Nepalese valleys to cleanse spaces and restore meditative calm.",
-        image: "path/to/cedarwood.webp"
+        properties: "Gathered organically from Nepalese valleys to cleanse spaces and restore meditative calm."
       },
       cr09: {
         title: "Raw Citrine Cluster",
         price: "$32.00",
         weight: "0.35 kg",
         materials: "Raw golden quartz crystal structure",
-        properties: "A celestial amplifier focused on solar plexus energy, bringing luck, success, and warm creative vibrations.",
-        image: "path/to/citrine.webp"
+        properties: "A celestial amplifier focused on solar plexus energy, bringing luck, success, and warm creative vibrations."
       },
       bo04: {
         title: "Black Obsidian Scrying Mirror",
         price: "$45.00",
         weight: "0.75 kg",
         materials: "Polished obsidian volcanic glass",
-        properties: "Highly defensive focal tool designed for vision journeys, aura diagnostics, and shadow transmutation.",
-        image: "path/to/mirror.webp"
+        properties: "Highly defensive focal tool designed for vision journeys, aura diagnostics, and shadow transmutation."
       },
       cc02: {
         title: "Amethyst Knit Wrap Shrug",
         price: "$78.00",
         weight: "0.55 kg",
         materials: "Custom organic cotton yarn, real amethyst nodes",
-        properties: "Jayme's custom crochet wrap shrug with hand-sewn amethyst crystals along the cuff points.",
-        image: "path/to/shrug.webp"
+        properties: "Jayme's custom crochet wrap shrug with hand-sewn amethyst crystals along the cuff points."
       }
     };
 
@@ -1253,8 +1168,6 @@
 
       container.innerHTML = `
         <div>
-          <!-- MODAL IMAGE DYNAMIC IMPLEMENTATION -->
-          <img src="${item.image}" alt="${item.title}" class="w-full h-auto rounded mb-3 border border-mysticGold/20">
           <span class="text-[8px] text-neonPink uppercase tracking-widest">// ARCHIVE INSPECT DETAILS</span>
           <h3 class="text-base font-bold text-white mt-0.5">${item.title}</h3>
         </div>
@@ -1316,22 +1229,10 @@
 
     function addOutfitToCart() {
       let itemsCount = 0;
-      if (studioOutfit.top) {
-        addToCart(studioOutfit.top.name, studioOutfit.top.price, 0.40);
-        itemsCount++;
-      }
-      if (studioOutfit.bottom) {
-        addToCart(studioOutfit.bottom.name, studioOutfit.bottom.price, 0.50);
-        itemsCount++;
-      }
-      if (studioOutfit.cloak) {
-        addToCart(studioOutfit.cloak.name, studioOutfit.cloak.price, 1.00);
-        itemsCount++;
-      }
-      if (studioOutfit.accessory) {
-        addToCart(studioOutfit.accessory.name, studioOutfit.accessory.price, 0.10);
-        itemsCount++;
-      }
+      if (studioOutfit.top) { addToCart(studioOutfit.top.name, studioOutfit.top.price, 0.40); itemsCount++; }
+      if (studioOutfit.bottom) { addToCart(studioOutfit.bottom.name, studioOutfit.bottom.price, 0.50); itemsCount++; }
+      if (studioOutfit.cloak) { addToCart(studioOutfit.cloak.name, studioOutfit.cloak.price, 1.00); itemsCount++; }
+      if (studioOutfit.accessory) { addToCart(studioOutfit.accessory.name, studioOutfit.accessory.price, 0.10); itemsCount++; }
 
       if (itemsCount > 0) {
         clearStudioSelections();
@@ -1444,8 +1345,11 @@
     }
 
     window.onload = () => {
+      // Ensure the portal is the first thing users see
+      switchTab('home');
       writeDiagnosticLog("System Boot Sequence: Completed Successfully");
       writeDiagnosticLog("Celestial whimsical star overlay active.");
+      writeDiagnosticLog("Portal Mainframe initialized.");
     };
   </script>
 
