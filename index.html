@@ -669,17 +669,21 @@ function renderVault(data) {
   container.innerHTML = ''; 
 
   data.forEach(item => {
-    // 1. Calculate stock status
-    const isOutOfStock = item.stock <= 0;
+    // 1. Calculate stock status safely
+    const isOutOfStock = !item.stock || item.stock <= 0;
+    
+    // 2. Fallback protection against blank rows/missing names
+    const safeName = item.name || '';
+    const safeCategory = item.category || 'uncategorized';
     
     container.innerHTML += `
       <div class="vault-card border border-mysticGold/30 bg-retroBlack p-3 rounded flex flex-col justify-between hover:border-neonPink transition-colors shadow-sm" 
-           data-category="${item.category}" 
-           data-name="${item.name.toLowerCase()}">
+           data-category="${safeCategory}" 
+           data-name="${safeName.toLowerCase()}">
         
         <div class="w-full h-48 mb-3 overflow-hidden rounded border border-mysticGold/20 bg-retroDark">
-          <img src="${item.imgURL}" 
-               alt="${item.name}" 
+          <img src="${item.imgURL || ''}" 
+               alt="${safeName}" 
                class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                onerror="this.onerror=null; this.src='https://via.placeholder.com/300?text=Orb+Loading...';">
         </div>
@@ -687,9 +691,9 @@ function renderVault(data) {
         <div class="flex justify-between items-start mb-2">
           <div>
             <span class="text-[8px] text-neonPink block uppercase">${item.sku || 'ITEM'}</span>
-            <h3 class="font-bold text-white text-xs mt-0.5">${item.name}</h3>
+            <h3 class="font-bold text-white text-xs mt-0.5">${safeName || 'Unnamed Artifact'}</h3>
           </div>
-          <span class="text-mysticGold font-bold">£${item.price}</span>
+          <span class="text-mysticGold font-bold">£${item.price || '0.00'}</span>
         </div>
 
         <div class="mb-3 text-[9px] font-mono">
@@ -698,13 +702,13 @@ function renderVault(data) {
               : `<span class="text-forestGreen">[ ${item.stock} IN STOCK ]</span>`}
         </div>
 
-        <p class="text-[10px] text-gray-400 mb-3">${item.description}</p>
+        <p class="text-[10px] text-gray-400 mb-3">${item.description || 'No description matrix loaded.'}</p>
         
         <div class="flex gap-1">
-          <button ${isOutOfStock ? 'disabled class="flex-grow bg-retroBlack border border-gray-700 text-gray-600 py-1 text-[10px] cursor-not-allowed opacity-50"' : `onclick="addToCart('${item.name}', ${item.price}, ${item.stock})" class="flex-grow bg-retroDark border border-mysticGold/30 text-mysticGold hover:border-neonPink hover:text-neonPink py-1 text-[10px] transition-colors"`}>
+          <button ${isOutOfStock ? 'disabled class="flex-grow bg-retroBlack border border-gray-700 text-gray-600 py-1 text-[10px] cursor-not-allowed opacity-50"' : `onclick="addToCart('${safeName.replace(/'/g, "\\'")}', ${item.price || 0}, ${item.stock || 0})" class="flex-grow bg-retroDark border border-mysticGold/30 text-mysticGold hover:border-neonPink hover:text-neonPink py-1 text-[10px] transition-colors"`}>
             ${isOutOfStock ? 'UNAVAILABLE' : 'Acquire_'}
           </button>
-          <button onclick="openInspectModal('${item.id}')" class="px-2 border border-mysticGold/10 text-gray-500 hover:text-mysticGold">[ INSPECT ]</button>
+          <button onclick="openInspectModal('${item.id || ''}')" class="px-2 border border-mysticGold/10 text-gray-500 hover:text-mysticGold">[ INSPECT ]</button>
         </div>
       </div>
     `;
