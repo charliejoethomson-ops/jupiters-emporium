@@ -645,80 +645,91 @@
     let chordIndex = 0;
     
     async function loadInventory() {
-      try {
-        writeDiagnosticLog("Fetching inventory from external source...");
-        const response = await fetch(WEB_APP_URL);
-        allProducts = await response.json(); 
-        renderVault(allProducts);
-        writeDiagnosticLog(`Successfully ingested ${allProducts.length} items.`);
-      } catch (error) {
-        writeDiagnosticLog("Error: Could not retrieve inventory.");
-        console.error(error);
+  try {
+    writeDiagnosticLog("Fetching inventory from external source...");
+    const response = await fetch(WEB_APP_URL);
+    const rawData = await response.json(); 
+    
+    // --- THE DATA NORMALIZER ---
+    // This scrubs the Google Sheet headers, removing spaces and forcing lowercase
+    allProducts = rawData.map(rawItem => {
+      const cleanItem = {};
+      for (let key in rawItem) {
+        if (key) {
+          const cleanKey = key.trim().toLowerCase();
+          cleanItem[cleanKey] = rawItem[key];
+        }
       }
-    }
+      return cleanItem;
+    });
+
+    renderVault(allProducts);
+    writeDiagnosticLog(`Successfully ingested ${allProducts.length} items.`);
+  } catch (error) {
+    writeDiagnosticLog("Error: Could not retrieve inventory.");
+    console.error(error);
+  }
+}
 
     function renderVault(data) {
-      const container = document.getElementById('vault-items-grid');
-      container.innerHTML = ''; 
+  const container = document.getElementById('vault-items-grid');
+  container.innerHTML = ''; 
 
-      data.forEach(item => {
-        // --- BULLETPROOF DATA NORMALIZATION ---
-        // Checks for lowercase, capitalized, or accidentally space-padded keys from the Google Sheet
-        const safeName = item.name || item.Name || item.NAME || '';
-        const safeCategory = (item.category || item.Category || 'uncategorized').toLowerCase().trim();
+  data.forEach(item => {
+    // Because of the normalizer, we know EXACTLY what the keys are called now.
+    const safeName = item.name || '';
+    const safeCategory = (item.category || 'uncategorized').toLowerCase().trim();
+    
+    let rawPrice = item.price || 0;
+    if (typeof rawPrice === 'string') rawPrice = rawPrice.replace(/[^0-9.-]+/g,"");
+    const parsedPrice = parseFloat(rawPrice) || 0;
+    
+    const safeStock = parseInt(item.stock) || 0;
+    const isOutOfStock = safeStock <= 0;
+    
+    const safeDescription = item.description || 'No description matrix loaded.';
+    const safeImg = item.imgurl || ''; // Normalizer changed imgURL to imgurl
+    const safeSku = item.sku || 'ITEM';
+    const safeId = item.id || '';
+
+    container.innerHTML += `
+      <div class="vault-card border border-mysticGold/30 bg-retroBlack p-3 rounded flex flex-col justify-between hover:border-neonPink transition-colors shadow-sm" 
+           data-category="${safeCategory}" 
+           data-name="${safeName.toLowerCase().replace(/"/g, '&quot;')}">
         
-        // Strip any rogue currency symbols before calculating logic
-        let rawPrice = item.price || item.Price || 0;
-        if (typeof rawPrice === 'string') rawPrice = rawPrice.replace(/[^0-9.-]+/g,"");
-        const parsedPrice = parseFloat(rawPrice) || 0;
-        
-        const safeStock = parseInt(item.stock !== undefined ? item.stock : (item.Stock !== undefined ? item.Stock : 0)) || 0;
-        const isOutOfStock = safeStock <= 0;
-        
-        const safeDescription = item.description || item.Description || 'No description matrix loaded.';
-        // Checks for imgURL, ImgURL, or a typo with a comma that was in the prompt
-        const safeImg = item.imgURL || item.imgUrl || item.ImgURL || item['imgURL,'] || ''; 
-        const safeSku = item.sku || item.Sku || item.SKU || 'ITEM';
-        const safeId = item.id || item.Id || item.ID || '';
+        <div class="w-full h-48 mb-3 overflow-hidden rounded border border-mysticGold/20 bg-retroDark flex items-center justify-center">
+          <img src="${safeImg}" 
+               alt="${safeName.replace(/"/g, '&quot;')}" 
+               class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+               onerror="this.onerror=null; this.src='https://via.placeholder.com/300/121216/cca41a?text=Orb+Loading...';">
+        </div>
 
-        container.innerHTML += `
-          <div class="vault-card border border-mysticGold/30 bg-retroBlack p-3 rounded flex flex-col justify-between hover:border-neonPink transition-colors shadow-sm" 
-               data-category="${safeCategory}" 
-               data-name="${safeName.toLowerCase().replace(/"/g, '&quot;')}">
-            
-            <div class="w-full h-48 mb-3 overflow-hidden rounded border border-mysticGold/20 bg-retroDark flex items-center justify-center">
-              <img src="${safeImg}" 
-                   alt="${safeName.replace(/"/g, '&quot;')}" 
-                   class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                   onerror="this.onerror=null; this.src='https://via.placeholder.com/300/121216/cca41a?text=Orb+Loading...';">
-            </div>
-
-            <div class="flex justify-between items-start mb-2">
-              <div>
-                <span class="text-[8px] text-neonPink block uppercase">${safeSku}</span>
-                <h3 class="font-bold text-white text-xs mt-0.5">${safeName || 'Unnamed Artifact'}</h3>
-              </div>
-              <span class="text-mysticGold font-bold">£${parsedPrice.toFixed(2)}</span>
-            </div>
-
-            <div class="mb-3 text-[9px] font-mono">
-                ${isOutOfStock 
-                  ? '<span class="text-red-500 font-bold">[ OUT OF STOCK ]</span>' 
-                  : `<span class="text-forestGreen">[ ${safeStock} IN STOCK ]</span>`}
-            </div>
-
-            <p class="text-[10px] text-gray-400 mb-3">${safeDescription}</p>
-            
-            <div class="flex gap-1 mt-auto">
-              <button ${isOutOfStock ? 'disabled class="flex-grow bg-retroBlack border border-gray-700 text-gray-600 py-1 text-[10px] cursor-not-allowed opacity-50"' : `onclick="addToCart('${safeName.replace(/'/g, "\\'")}', ${parsedPrice}, ${safeStock})" class="flex-grow bg-retroDark border border-mysticGold/30 text-mysticGold hover:border-neonPink hover:text-neonPink py-1 text-[10px] transition-colors"`}>
-                ${isOutOfStock ? 'UNAVAILABLE' : 'Acquire_'}
-              </button>
-              <button onclick="openInspectModal('${safeId}')" class="px-2 border border-mysticGold/10 text-gray-500 hover:text-mysticGold">[ INSPECT ]</button>
-            </div>
+        <div class="flex justify-between items-start mb-2">
+          <div>
+            <span class="text-[8px] text-neonPink block uppercase">${safeSku}</span>
+            <h3 class="font-bold text-white text-xs mt-0.5">${safeName || 'Unnamed Artifact'}</h3>
           </div>
-        `;
-      });
-    }
+          <span class="text-mysticGold font-bold">£${parsedPrice.toFixed(2)}</span>
+        </div>
+
+        <div class="mb-3 text-[9px] font-mono">
+            ${isOutOfStock 
+              ? '<span class="text-red-500 font-bold">[ OUT OF STOCK ]</span>' 
+              : `<span class="text-forestGreen">[ ${safeStock} IN STOCK ]</span>`}
+        </div>
+
+        <p class="text-[10px] text-gray-400 mb-3">${safeDescription}</p>
+        
+        <div class="flex gap-1 mt-auto">
+          <button ${isOutOfStock ? 'disabled class="flex-grow bg-retroBlack border border-gray-700 text-gray-600 py-1 text-[10px] cursor-not-allowed opacity-50"' : `onclick="addToCart('${safeName.replace(/'/g, "\\'")}', ${parsedPrice}, ${safeStock})" class="flex-grow bg-retroDark border border-mysticGold/30 text-mysticGold hover:border-neonPink hover:text-neonPink py-1 text-[10px] transition-colors"`}>
+            ${isOutOfStock ? 'UNAVAILABLE' : 'Acquire_'}
+          </button>
+          <button onclick="openInspectModal('${safeId}')" class="px-2 border border-mysticGold/10 text-gray-500 hover:text-mysticGold">[ INSPECT ]</button>
+        </div>
+      </div>
+    `;
+  });
+}
     
     function initAudio() {
       if (!audioCtx) {
@@ -1127,22 +1138,21 @@
     }
 
     function updateVaultView() {
-      const category = getActiveCategory();
-      const query = document.getElementById('vault-search').value.toLowerCase();
-      
-      const filtered = allProducts.filter(item => {
-        // Use exactly the same data extraction we used in renderVault
-        const itemCat = (item.category || item.Category || '').toLowerCase().trim();
-        const itemName = (item.name || item.Name || '').toLowerCase();
-        
-        const matchesCat = (category === 'all' || itemCat === category);
-        const matchesSearch = itemName.includes(query);
-        
-        return matchesCat && matchesSearch;
-      });
-      
-      renderVault(filtered);
-    }
+  const category = getActiveCategory();
+  const query = document.getElementById('vault-search').value.toLowerCase();
+  
+  const filtered = allProducts.filter(item => {
+    const itemCat = (item.category || '').toLowerCase().trim();
+    const itemName = (item.name || '').toLowerCase();
+    
+    const matchesCat = (category === 'all' || itemCat === category);
+    const matchesSearch = itemName.includes(query);
+    
+    return matchesCat && matchesSearch;
+  });
+  
+  renderVault(filtered);
+}
     
     function filterVault(category) {
       playBeep(420, 0.04, 'sine');
@@ -1161,41 +1171,40 @@
 
     // --- REWRITTEN INSPECT MODAL TO USE LIVE DATA ---
     function openInspectModal(id) {
-      playBeep(500, 0.08, 'sine');
-      
-      // Look up the exact product from the memory array
-      const item = allProducts.find(p => (p.id == id) || (p.Id == id) || (p.ID == id));
-      
-      if (!item) {
-        writeDiagnosticLog("System Error: Could not locate requested item matrix.");
-        return;
-      }
+  playBeep(500, 0.08, 'sine');
+  
+  const item = allProducts.find(p => p.id == id);
+  
+  if (!item) {
+    writeDiagnosticLog("System Error: Could not locate requested item matrix.");
+    return;
+  }
 
       // Re-apply the same data normalizations
-      const safeName = item.name || item.Name || 'Unnamed Artifact';
-      let rawPrice = item.price || item.Price || 0;
-      if (typeof rawPrice === 'string') rawPrice = rawPrice.replace(/[^0-9.-]+/g,"");
-      const parsedPrice = parseFloat(rawPrice) || 0;
-      const safeDesc = item.description || item.Description || 'No description matrix loaded.';
+      const safeName = item.name || 'Unnamed Artifact';
+  let rawPrice = item.price || 0;
+  if (typeof rawPrice === 'string') rawPrice = rawPrice.replace(/[^0-9.-]+/g,"");
+  const parsedPrice = parseFloat(rawPrice) || 0;
+  const safeDesc = item.description || 'No description matrix loaded.';
 
-      const container = document.getElementById('modal-content');
+  const container = document.getElementById('modal-content');
 
-      container.innerHTML = `
-        <div>
-          <span class="text-[8px] text-neonPink uppercase tracking-widest">// ARCHIVE INSPECT DETAILS</span>
-          <h3 class="text-base font-bold text-white mt-0.5">${safeName}</h3>
-        </div>
-        <div class="border-t border-mysticGold/25 pt-2 space-y-1.5 text-[11px]">
-          <div><span class="text-gray-500 font-bold">VALUATION:</span> <span class="text-mysticGold">£${parsedPrice.toFixed(2)}</span></div>
-          <div class="border-t border-mysticGold/10 pt-1.5">
-            <span class="text-gray-500 block mb-0.5">PROPERTIES:</span>
-            <p class="text-gray-300 leading-normal">${safeDesc}</p>
-          </div>
-        </div>
-      `;
+  container.innerHTML = `
+    <div>
+      <span class="text-[8px] text-neonPink uppercase tracking-widest">// ARCHIVE INSPECT DETAILS</span>
+      <h3 class="text-base font-bold text-white mt-0.5">${safeName}</h3>
+    </div>
+    <div class="border-t border-mysticGold/25 pt-2 space-y-1.5 text-[11px]">
+      <div><span class="text-gray-500 font-bold">VALUATION:</span> <span class="text-mysticGold">£${parsedPrice.toFixed(2)}</span></div>
+      <div class="border-t border-mysticGold/10 pt-1.5">
+        <span class="text-gray-500 block mb-0.5">PROPERTIES:</span>
+        <p class="text-gray-300 leading-normal">${safeDesc}</p>
+      </div>
+    </div>
+  `;
 
-      document.getElementById('inspect-modal').classList.remove('hidden');
-    }
+  document.getElementById('inspect-modal').classList.remove('hidden');
+}
 
     function closeInspectModal() {
       playBeep(210, 0.05, 'triangle');
