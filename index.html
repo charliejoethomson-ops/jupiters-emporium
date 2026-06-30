@@ -453,10 +453,13 @@
         <div id="tab-shop" class="tab-pane hidden bg-retroDark/95 rounded relative overflow-hidden border border-mysticGold/20">
           <div class="bg-gradient-to-r from-neonPink to-retroBlack px-4 py-2 flex justify-between items-center text-xs font-mono border-b border-mysticGold/30">
             <span class="font-bold text-white flex items-center gap-1">👜 ALCHEMIST_SHOP.EXE</span>
-            <div class="flex gap-1.5">
-              <span class="w-3 h-3 bg-mysticGold/20 rounded-full border border-mysticGold flex items-center justify-center text-[8px]">_</span>
-              <span class="w-3 h-3 bg-mysticGold/20 rounded-full border border-mysticGold flex items-center justify-center text-[8px]">□</span>
-              <span class="w-3 h-3 bg-neonPink/20 rounded-full border border-neonPink flex items-center justify-center text-[8px]">X</span>
+           <div class="flex flex-wrap gap-1">
+                <button onclick="filterVault('all')" id="filter-all" class="filter-btn px-2 py-0.5 border border-neonPink text-neonPink rounded bg-retroBlack transition-all">ALL</button>
+                <button onclick="filterVault('clothing')" id="filter-clothing" class="filter-btn px-2 py-0.5 border border-mysticGold/30 text-mysticGold rounded hover:border-neonPink transition-all">CLOTHING</button>
+                <button onclick="filterVault('home')" id="filter-home" class="filter-btn px-2 py-0.5 border border-mysticGold/30 text-mysticGold rounded hover:border-neonPink transition-all">HOME</button>
+                <button onclick="filterVault('wellness')" id="filter-wellness" class="filter-btn px-2 py-0.5 border border-mysticGold/30 text-mysticGold rounded hover:border-neonPink transition-all">WELLNESS</button>
+                <button onclick="filterVault('food')" id="filter-food" class="filter-btn px-2 py-0.5 border border-mysticGold/30 text-mysticGold rounded hover:border-neonPink transition-all">FOOD</button>
+            </div>
             </div>
           </div>
 
@@ -1102,23 +1105,30 @@
     }
 
     function filterVault(category) {
-      playBeep(420, 0.04, 'sine');
-      document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.className = 'filter-btn px-2 py-0.5 border border-mysticGold/30 text-mysticGold rounded bg-retroBlack transition-all';
-      });
+  playBeep(420, 0.04, 'sine');
+  
+  // 1. UI Reset
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.className = 'filter-btn px-2 py-0.5 border border-mysticGold/30 text-mysticGold rounded bg-retroBlack transition-all';
+  });
+  document.getElementById(`filter-${category}`).className = 'filter-btn px-2 py-0.5 border border-neonPink text-neonPink rounded bg-retroBlack transition-all';
 
-      const activeFilterBtn = document.getElementById(`filter-${category}`);
-      activeFilterBtn.className = 'filter-btn px-2 py-0.5 border border-neonPink text-neonPink rounded bg-retroBlack transition-all';
+  // 2. Data Filtering
+  const searchQuery = document.getElementById('vault-search').value.toLowerCase();
+  
+  document.querySelectorAll('.vault-card').forEach(card => {
+    const matchesCategory = (category === 'all' || card.getAttribute('data-category') === category);
+    const matchesSearch = card.getAttribute('data-name').toLowerCase().includes(searchQuery);
 
-      document.querySelectorAll('.vault-card').forEach(card => {
-        if (category === 'all' || card.getAttribute('data-category') === category) {
-          card.classList.remove('hidden');
-        } else {
-          card.classList.add('hidden');
-        }
-      });
-      writeDiagnosticLog(`Filtering vault items by: ${category.toUpperCase()}`);
+    if (matchesCategory && matchesSearch) {
+      card.classList.remove('hidden');
+    } else {
+      card.classList.add('hidden');
     }
+  });
+  
+  writeDiagnosticLog(`Filtering vault by: ${category.toUpperCase()}`);
+}
 
     function searchVault(query) {
       const q = query.toLowerCase().trim();
