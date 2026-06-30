@@ -649,6 +649,9 @@
     writeDiagnosticLog("Fetching inventory from external source...");
     const response = await fetch(WEB_APP_URL);
     const rawData = await response.json(); 
+
+    // 🔍 ADD THIS LINE RIGHT HERE:
+    console.log("THE RAW DATA FROM GOOGLE:", rawData[0]);
     
     // --- THE DATA NORMALIZER ---
     // This scrubs the Google Sheet headers, removing spaces and forcing lowercase
