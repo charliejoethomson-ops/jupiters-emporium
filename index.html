@@ -625,7 +625,7 @@
 
   <!-- INSPECT MODALS CONTAINER -->
   <div id="inspect-modal" class="fixed inset-0 bg-black/90 flex items-center justify-center p-4 z-50 hidden">
-    <div class="border-2 border-mysticGold bg-retroBlack p-5 max-w-sm w-full rounded glow-gold-border font-mono relative">
+    <div class="border-2 border-mysticGold bg-retroBlack p-5 max-w-md w-full rounded glow-gold-border font-mono relative">
       <button onclick="closeInspectModal()" class="absolute top-2.5 right-2.5 text-red-500 hover:text-red-400 font-bold">[ X ]</button>
       <div id="modal-content" class="space-y-3.5 text-xs">
         <!-- Dyn details -->
@@ -1177,42 +1177,54 @@
       renderVault(filtered);
     }
 
-    // --- REWRITTEN INSPECT MODAL TO USE LIVE DATA ---
-    function openInspectModal(id) {
-      playBeep(500, 0.08, 'sine');
-      
-      const item = allProducts.find(p => p.id == id);
-      
-      if (!item) {
-        writeDiagnosticLog("System Error: Could not locate requested item matrix.");
-        return;
-      }
+    // --- REWRITTEN INSPECT MODAL TO USE LIVE DATA & IMAGES ---
+function openInspectModal(id) {
+  playBeep(500, 0.08, 'sine');
+  
+  const item = allProducts.find(p => p.id == id);
+  
+  if (!item) {
+    writeDiagnosticLog("System Error: Could not locate requested item matrix.");
+    return;
+  }
 
-      // Re-apply the same data normalizations
-      const safeName = item.name || 'Unnamed Artifact';
-      let rawPrice = item.price || 0;
-      if (typeof rawPrice === 'string') rawPrice = rawPrice.replace(/[^0-9.-]+/g,"");
-      const parsedPrice = parseFloat(rawPrice) || 0;
-      const safeDesc = item.description || 'No description matrix loaded.';
+  // Re-apply the data normalizations
+  const safeName = item.name || 'Unnamed Artifact';
+  let rawPrice = item.price || 0;
+  if (typeof rawPrice === 'string') rawPrice = rawPrice.replace(/[^0-9.-]+/g,"");
+  const parsedPrice = parseFloat(rawPrice) || 0;
+  const safeDesc = item.description || 'No description matrix loaded.';
+  
+  // NEW: Grab the image securely
+  const safeImg = item.imgurl || '';
 
-      const container = document.getElementById('modal-content');
+  const container = document.getElementById('modal-content');
 
-      container.innerHTML = `
-        <div>
-          <span class="text-[8px] text-neonPink uppercase tracking-widest">// ARCHIVE INSPECT DETAILS</span>
-          <h3 class="text-base font-bold text-white mt-0.5">${safeName}</h3>
-        </div>
-        <div class="border-t border-mysticGold/25 pt-2 space-y-1.5 text-[11px]">
-          <div><span class="text-gray-500 font-bold">VALUATION:</span> <span class="text-mysticGold">£${parsedPrice.toFixed(2)}</span></div>
-          <div class="border-t border-mysticGold/10 pt-1.5">
-            <span class="text-gray-500 block mb-0.5">PROPERTIES:</span>
-            <p class="text-gray-300 leading-normal">${safeDesc}</p>
-          </div>
-        </div>
-      `;
+  // Inject the image and details into the modal
+  container.innerHTML = `
+    <div>
+      <span class="text-[8px] text-neonPink uppercase tracking-widest">// ARCHIVE INSPECT DETAILS</span>
+      <h3 class="text-base font-bold text-white mt-0.5 mb-3">${safeName}</h3>
+    </div>
+    
+    <div class="w-full aspect-square mb-4 border border-mysticGold/30 bg-retroDark flex items-center justify-center overflow-hidden rounded shadow-[0_0_10px_rgba(204,164,26,0.1)]">
+      <img src="${safeImg}" 
+           alt="${safeName.replace(/"/g, '&quot;')}" 
+           class="w-full h-full object-contain"
+           onerror="this.onerror=null; this.src='https://via.placeholder.com/400/121216/cca41a?text=Orb+Loading...';">
+    </div>
 
-      document.getElementById('inspect-modal').classList.remove('hidden');
-    }
+    <div class="border-t border-mysticGold/25 pt-3 space-y-2 text-[11px]">
+      <div><span class="text-gray-500 font-bold">VALUATION:</span> <span class="text-mysticGold">£${parsedPrice.toFixed(2)}</span></div>
+      <div class="border-t border-mysticGold/10 pt-2">
+        <span class="text-gray-500 block mb-1 font-bold">PROPERTIES:</span>
+        <p class="text-gray-300 leading-relaxed max-h-[150px] overflow-y-auto pr-1">${safeDesc}</p>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('inspect-modal').classList.remove('hidden');
+}
 
     function closeInspectModal() {
       playBeep(210, 0.05, 'triangle');
