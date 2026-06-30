@@ -105,8 +105,6 @@
       background: linear-gradient(to top, rgba(255,0,127,0.1), transparent) !important;
       text-shadow: 0 0 8px rgba(255, 0, 127, 0.5);
     }
-
-    
   </style>
 </head>
 <body class="text-gray-200 retro-grid-pattern min-h-screen relative selection:bg-neonPink selection:text-white pb-12">
@@ -453,30 +451,24 @@
         <div id="tab-shop" class="tab-pane hidden bg-retroDark/95 rounded relative overflow-hidden border border-mysticGold/20">
           <div class="bg-gradient-to-r from-neonPink to-retroBlack px-4 py-2 flex justify-between items-center text-xs font-mono border-b border-mysticGold/30">
             <span class="font-bold text-white flex items-center gap-1">👜 ALCHEMIST_SHOP.EXE</span>
-           <div class="flex flex-wrap gap-1">
-
-             <!-- ALL Filter -->
-                <button onclick="filterVault('all'); updateVaultView()" id="filter-all" ...>ALL</button>
-             <!-- Clothing Filter -->
-                <button onclick="filterVault('clothing'); updateVaultView()" id="filter-clothing" ...>CLOTHING</button>
-             <!-- Home Filter -->
-                <button onclick="filterVault('home'); updateVaultView()" id="filter-home" ...>HOME</button>
-             <!-- Wellness & Crystals Filter -->
-               <button onclick="filterVault('wellness'); updateVaultView()" id="filter-wellness" ...>WELLNESS</button>
-             <!-- Food Filter -->
-               <button onclick="filterVault('food'); updateVaultView()" id="filter-food" ...>FOOD</button>
-            </div>
+            <div class="flex gap-1.5">
+              <span class="w-3 h-3 bg-mysticGold/20 rounded-full border border-mysticGold flex items-center justify-center text-[8px]">_</span>
+              <span class="w-3 h-3 bg-mysticGold/20 rounded-full border border-mysticGold flex items-center justify-center text-[8px]">□</span>
+              <span class="w-3 h-3 bg-neonPink/20 rounded-full border border-neonPink flex items-center justify-center text-[8px]">X</span>
             </div>
           </div>
 
           <div class="p-6">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-mysticGold/20 pb-4 mb-4 font-mono text-xs">
               <h2 class="text-mysticGold font-bold text-sm tracking-wider">// ARCHIVED VAULT INDEX</h2>
+              
+              <!-- UNIFIED FILTER BAR -->
               <div class="flex flex-wrap gap-1">
-                <button onclick="filterVault('all')" id="filter-all" class="filter-btn px-2 py-0.5 border border-neonPink text-neonPink rounded bg-retroBlack transition-all">ALL</button>
-                <button onclick="filterVault('crochet')" id="filter-crochet" class="filter-btn px-2 py-0.5 border border-mysticGold/30 text-mysticGold rounded hover:border-neonPink transition-all">CROCHET</button>
-                <button onclick="filterVault('crystals')" id="filter-crystals" class="filter-btn px-2 py-0.5 border border-mysticGold/30 text-mysticGold rounded hover:border-neonPink transition-all">CRYSTALS</button>
-                <button onclick="filterVault('nepalese')" id="filter-nepalese" class="filter-btn px-2 py-0.5 border border-mysticGold/30 text-mysticGold rounded hover:border-neonPink transition-all">NEPALESE</button>
+                <button onclick="filterVault('all'); updateVaultView()" id="filter-all" class="filter-btn px-2 py-0.5 border border-neonPink text-neonPink rounded bg-retroBlack transition-all">ALL</button>
+                <button onclick="filterVault('clothing'); updateVaultView()" id="filter-clothing" class="filter-btn px-2 py-0.5 border border-mysticGold/30 text-mysticGold rounded hover:border-neonPink transition-all">CLOTHING</button>
+                <button onclick="filterVault('home'); updateVaultView()" id="filter-home" class="filter-btn px-2 py-0.5 border border-mysticGold/30 text-mysticGold rounded hover:border-neonPink transition-all">HOME</button>
+                <button onclick="filterVault('wellness'); updateVaultView()" id="filter-wellness" class="filter-btn px-2 py-0.5 border border-mysticGold/30 text-mysticGold rounded hover:border-neonPink transition-all">WELLNESS</button>
+                <button onclick="filterVault('food'); updateVaultView()" id="filter-food" class="filter-btn px-2 py-0.5 border border-mysticGold/30 text-mysticGold rounded hover:border-neonPink transition-all">FOOD</button>
               </div>
             </div>
 
@@ -486,9 +478,10 @@
             </div>
 
             <div id="vault-items-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4 font-mono text-xs">
-            
-            
+              <!-- Dynamically populated by JS -->
             </div>
+          </div>
+        </div>
 
         <!-- TAB 04_COORDINATES (Contact / Guestbook Window) -->
         <div id="tab-coordinates" class="tab-pane hidden bg-retroDark/95 rounded relative overflow-hidden border border-mysticGold/20">
@@ -641,8 +634,8 @@
   </div>
 
   <script>
-  let allProducts = []; // Stores the full inventory from your sheet
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxAb6x89hRpzs280fY7mHA3Ylka0FT2vnPFYwMlAEKJLZQcl-olDDQg_p9iv7J8cJ9TlA/exec"; // Your published Google Script URL
+    let allProducts = []; 
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxAb6x89hRpzs280fY7mHA3Ylka0FT2vnPFYwMlAEKJLZQcl-olDDQg_p9iv7J8cJ9TlA/exec"; 
     
     let audioCtx = null;
     let jukeboxSource = null; 
@@ -651,69 +644,81 @@ const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxAb6x89hRpzs280fY7
     let lullabyInterval = null;
     let chordIndex = 0;
     
-async function loadInventory() {
-  try {
-    writeDiagnosticLog("Fetching inventory from external source...");
-    const response = await fetch(WEB_APP_URL);
-    allProducts = await response.json(); 
-    renderVault(allProducts);
-    writeDiagnosticLog(`Successfully ingested ${allProducts.length} items.`);
-  } catch (error) {
-    writeDiagnosticLog("Error: Could not retrieve inventory.");
-    console.error(error);
-  }
-}
+    async function loadInventory() {
+      try {
+        writeDiagnosticLog("Fetching inventory from external source...");
+        const response = await fetch(WEB_APP_URL);
+        allProducts = await response.json(); 
+        renderVault(allProducts);
+        writeDiagnosticLog(`Successfully ingested ${allProducts.length} items.`);
+      } catch (error) {
+        writeDiagnosticLog("Error: Could not retrieve inventory.");
+        console.error(error);
+      }
+    }
 
-function renderVault(data) {
-  const container = document.getElementById('vault-items-grid');
-  container.innerHTML = ''; 
+    function renderVault(data) {
+      const container = document.getElementById('vault-items-grid');
+      container.innerHTML = ''; 
 
-  data.forEach(item => {
-    // 1. Calculate stock status safely
-    const isOutOfStock = !item.stock || item.stock <= 0;
-    
-    // 2. Fallback protection against blank rows/missing names
-    const safeName = item.name || '';
-    const safeCategory = item.category || 'uncategorized';
-    
-    container.innerHTML += `
-      <div class="vault-card border border-mysticGold/30 bg-retroBlack p-3 rounded flex flex-col justify-between hover:border-neonPink transition-colors shadow-sm" 
-           data-category="${safeCategory}" 
-           data-name="${safeName.toLowerCase()}">
+      data.forEach(item => {
+        // --- BULLETPROOF DATA NORMALIZATION ---
+        // Checks for lowercase, capitalized, or accidentally space-padded keys from the Google Sheet
+        const safeName = item.name || item.Name || item.NAME || '';
+        const safeCategory = (item.category || item.Category || 'uncategorized').toLowerCase().trim();
         
-        <div class="w-full h-48 mb-3 overflow-hidden rounded border border-mysticGold/20 bg-retroDark">
-          <img src="${item.imgURL || ''}" 
-               alt="${safeName}" 
-               class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-               onerror="this.onerror=null; this.src='https://via.placeholder.com/300?text=Orb+Loading...';">
-        </div>
+        // Strip any rogue currency symbols before calculating logic
+        let rawPrice = item.price || item.Price || 0;
+        if (typeof rawPrice === 'string') rawPrice = rawPrice.replace(/[^0-9.-]+/g,"");
+        const parsedPrice = parseFloat(rawPrice) || 0;
+        
+        const safeStock = parseInt(item.stock !== undefined ? item.stock : (item.Stock !== undefined ? item.Stock : 0)) || 0;
+        const isOutOfStock = safeStock <= 0;
+        
+        const safeDescription = item.description || item.Description || 'No description matrix loaded.';
+        // Checks for imgURL, ImgURL, or a typo with a comma that was in the prompt
+        const safeImg = item.imgURL || item.imgUrl || item.ImgURL || item['imgURL,'] || ''; 
+        const safeSku = item.sku || item.Sku || item.SKU || 'ITEM';
+        const safeId = item.id || item.Id || item.ID || '';
 
-        <div class="flex justify-between items-start mb-2">
-          <div>
-            <span class="text-[8px] text-neonPink block uppercase">${item.sku || 'ITEM'}</span>
-            <h3 class="font-bold text-white text-xs mt-0.5">${safeName || 'Unnamed Artifact'}</h3>
+        container.innerHTML += `
+          <div class="vault-card border border-mysticGold/30 bg-retroBlack p-3 rounded flex flex-col justify-between hover:border-neonPink transition-colors shadow-sm" 
+               data-category="${safeCategory}" 
+               data-name="${safeName.toLowerCase().replace(/"/g, '&quot;')}">
+            
+            <div class="w-full h-48 mb-3 overflow-hidden rounded border border-mysticGold/20 bg-retroDark flex items-center justify-center">
+              <img src="${safeImg}" 
+                   alt="${safeName.replace(/"/g, '&quot;')}" 
+                   class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                   onerror="this.onerror=null; this.src='https://via.placeholder.com/300/121216/cca41a?text=Orb+Loading...';">
+            </div>
+
+            <div class="flex justify-between items-start mb-2">
+              <div>
+                <span class="text-[8px] text-neonPink block uppercase">${safeSku}</span>
+                <h3 class="font-bold text-white text-xs mt-0.5">${safeName || 'Unnamed Artifact'}</h3>
+              </div>
+              <span class="text-mysticGold font-bold">£${parsedPrice.toFixed(2)}</span>
+            </div>
+
+            <div class="mb-3 text-[9px] font-mono">
+                ${isOutOfStock 
+                  ? '<span class="text-red-500 font-bold">[ OUT OF STOCK ]</span>' 
+                  : `<span class="text-forestGreen">[ ${safeStock} IN STOCK ]</span>`}
+            </div>
+
+            <p class="text-[10px] text-gray-400 mb-3">${safeDescription}</p>
+            
+            <div class="flex gap-1 mt-auto">
+              <button ${isOutOfStock ? 'disabled class="flex-grow bg-retroBlack border border-gray-700 text-gray-600 py-1 text-[10px] cursor-not-allowed opacity-50"' : `onclick="addToCart('${safeName.replace(/'/g, "\\'")}', ${parsedPrice}, ${safeStock})" class="flex-grow bg-retroDark border border-mysticGold/30 text-mysticGold hover:border-neonPink hover:text-neonPink py-1 text-[10px] transition-colors"`}>
+                ${isOutOfStock ? 'UNAVAILABLE' : 'Acquire_'}
+              </button>
+              <button onclick="openInspectModal('${safeId}')" class="px-2 border border-mysticGold/10 text-gray-500 hover:text-mysticGold">[ INSPECT ]</button>
+            </div>
           </div>
-          <span class="text-mysticGold font-bold">£${item.price || '0.00'}</span>
-        </div>
-
-        <div class="mb-3 text-[9px] font-mono">
-            ${isOutOfStock 
-              ? '<span class="text-red-500 font-bold">[ OUT OF STOCK ]</span>' 
-              : `<span class="text-forestGreen">[ ${item.stock} IN STOCK ]</span>`}
-        </div>
-
-        <p class="text-[10px] text-gray-400 mb-3">${item.description || 'No description matrix loaded.'}</p>
-        
-        <div class="flex gap-1">
-          <button ${isOutOfStock ? 'disabled class="flex-grow bg-retroBlack border border-gray-700 text-gray-600 py-1 text-[10px] cursor-not-allowed opacity-50"' : `onclick="addToCart('${safeName.replace(/'/g, "\\'")}', ${item.price || 0}, ${item.stock || 0})" class="flex-grow bg-retroDark border border-mysticGold/30 text-mysticGold hover:border-neonPink hover:text-neonPink py-1 text-[10px] transition-colors"`}>
-            ${isOutOfStock ? 'UNAVAILABLE' : 'Acquire_'}
-          </button>
-          <button onclick="openInspectModal('${item.id || ''}')" class="px-2 border border-mysticGold/10 text-gray-500 hover:text-mysticGold">[ INSPECT ]</button>
-        </div>
-      </div>
-    `;
-  });
-}
+        `;
+      });
+    }
     
     function initAudio() {
       if (!audioCtx) {
@@ -1113,117 +1118,78 @@ function renderVault(data) {
       if (studioOutfit.cloak) sumVal += studioOutfit.cloak.price;
       if (studioOutfit.accessory) sumVal += studioOutfit.accessory.price;
 
-      document.getElementById('studio-valuation-badge').innerText = `$${sumVal.toFixed(2)}`;
+      document.getElementById('studio-valuation-badge').innerText = `£${sumVal.toFixed(2)}`;
     }
 
-    // Helper to determine which category is currently selected
-function getActiveCategory() {
-  const activeBtn = document.querySelector('.filter-btn.border-neonPink');
-  // Returns the category name (e.g., 'clothing') based on the button ID
-  return activeBtn ? activeBtn.id.replace('filter-', '') : 'all';
-}
+    function getActiveCategory() {
+      const activeBtn = document.querySelector('.filter-btn.border-neonPink');
+      return activeBtn ? activeBtn.id.replace('filter-', '') : 'all';
+    }
 
-// Your refined update function
-function updateVaultView() {
-  const category = getActiveCategory();
-  const query = document.getElementById('vault-search').value.toLowerCase();
-  
-  const filtered = allProducts.filter(item => {
-    // Ensure case-insensitive category matching (handling 'all' as a wildcard)
-    const matchesCat = (category === 'all' || item.category === category);
-    const matchesSearch = item.name.toLowerCase().includes(query);
-    return matchesCat && matchesSearch;
-  });
-  
-  renderVault(filtered);
-}
+    function updateVaultView() {
+      const category = getActiveCategory();
+      const query = document.getElementById('vault-search').value.toLowerCase();
+      
+      const filtered = allProducts.filter(item => {
+        // Use exactly the same data extraction we used in renderVault
+        const itemCat = (item.category || item.Category || '').toLowerCase().trim();
+        const itemName = (item.name || item.Name || '').toLowerCase();
+        
+        const matchesCat = (category === 'all' || itemCat === category);
+        const matchesSearch = itemName.includes(query);
+        
+        return matchesCat && matchesSearch;
+      });
+      
+      renderVault(filtered);
+    }
     
     function filterVault(category) {
-  playBeep(420, 0.04, 'sine');
-  
-  // 1. UI Reset
-  document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.className = 'filter-btn px-2 py-0.5 border border-mysticGold/30 text-mysticGold rounded bg-retroBlack transition-all';
-  });
-  document.getElementById(`filter-${category}`).className = 'filter-btn px-2 py-0.5 border border-neonPink text-neonPink rounded bg-retroBlack transition-all';
-
-  // 2. Data Filtering
-  const searchQuery = document.getElementById('vault-search').value.toLowerCase();
-  
-  document.querySelectorAll('.vault-card').forEach(card => {
-    const matchesCategory = (category === 'all' || card.getAttribute('data-category') === category);
-    const matchesSearch = card.getAttribute('data-name').toLowerCase().includes(searchQuery);
-
-    if (matchesCategory && matchesSearch) {
-      card.classList.remove('hidden');
-    } else {
-      card.classList.add('hidden');
-    }
-  });
-  
-  writeDiagnosticLog(`Filtering vault by: ${category.toUpperCase()}`);
-}
-
-    function searchVault(query) {
-      const q = query.toLowerCase().trim();
-      document.querySelectorAll('.vault-card').forEach(card => {
-        const name = card.getAttribute('data-name');
-        if (name.includes(q)) {
-          card.classList.remove('hidden');
-        } else {
-          card.classList.add('hidden');
-        }
+      playBeep(420, 0.04, 'sine');
+      
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.className = 'filter-btn px-2 py-0.5 border border-mysticGold/30 text-mysticGold rounded bg-retroBlack transition-all hover:border-neonPink';
       });
+      
+      const activeBtn = document.getElementById(`filter-${category}`);
+      if (activeBtn) {
+        activeBtn.className = 'filter-btn px-2 py-0.5 border border-neonPink text-neonPink rounded bg-retroBlack transition-all';
+      }
+      
+      writeDiagnosticLog(`Filtering vault by: ${category.toUpperCase()}`);
     }
 
-    const inspectDatabase = {
-      ins01: {
-        title: "Himalayan Cedarwood Incense",
-        price: "$18.00",
-        weight: "0.20 kg",
-        materials: "Pine resins, essential cedar extracts",
-        properties: "Gathered organically from Nepalese valleys to cleanse spaces and restore meditative calm."
-      },
-      cr09: {
-        title: "Raw Citrine Cluster",
-        price: "$32.00",
-        weight: "0.35 kg",
-        materials: "Raw golden quartz crystal structure",
-        properties: "A celestial amplifier focused on solar plexus energy, bringing luck, success, and warm creative vibrations."
-      },
-      bo04: {
-        title: "Black Obsidian Scrying Mirror",
-        price: "$45.00",
-        weight: "0.75 kg",
-        materials: "Polished obsidian volcanic glass",
-        properties: "Highly defensive focal tool designed for vision journeys, aura diagnostics, and shadow transmutation."
-      },
-      cc02: {
-        title: "Amethyst Knit Wrap Shrug",
-        price: "$78.00",
-        weight: "0.55 kg",
-        materials: "Custom organic cotton yarn, real amethyst nodes",
-        properties: "Jayme's custom crochet wrap shrug with hand-sewn amethyst crystals along the cuff points."
-      }
-    };
-
-    function openInspectModal(key) {
+    // --- REWRITTEN INSPECT MODAL TO USE LIVE DATA ---
+    function openInspectModal(id) {
       playBeep(500, 0.08, 'sine');
-      const item = inspectDatabase[key];
+      
+      // Look up the exact product from the memory array
+      const item = allProducts.find(p => (p.id == id) || (p.Id == id) || (p.ID == id));
+      
+      if (!item) {
+        writeDiagnosticLog("System Error: Could not locate requested item matrix.");
+        return;
+      }
+
+      // Re-apply the same data normalizations
+      const safeName = item.name || item.Name || 'Unnamed Artifact';
+      let rawPrice = item.price || item.Price || 0;
+      if (typeof rawPrice === 'string') rawPrice = rawPrice.replace(/[^0-9.-]+/g,"");
+      const parsedPrice = parseFloat(rawPrice) || 0;
+      const safeDesc = item.description || item.Description || 'No description matrix loaded.';
+
       const container = document.getElementById('modal-content');
 
       container.innerHTML = `
         <div>
           <span class="text-[8px] text-neonPink uppercase tracking-widest">// ARCHIVE INSPECT DETAILS</span>
-          <h3 class="text-base font-bold text-white mt-0.5">${item.title}</h3>
+          <h3 class="text-base font-bold text-white mt-0.5">${safeName}</h3>
         </div>
         <div class="border-t border-mysticGold/25 pt-2 space-y-1.5 text-[11px]">
-          <div><span class="text-gray-500 font-bold">VALUATION:</span> <span class="text-mysticGold">${item.price}</span></div>
-          <div><span class="text-gray-500 font-bold">MASS:</span> <span class="text-white">${item.weight}</span></div>
-          <div><span class="text-gray-500 font-bold">CONSTITUENTS:</span> <span class="text-white">${item.materials}</span></div>
+          <div><span class="text-gray-500 font-bold">VALUATION:</span> <span class="text-mysticGold">£${parsedPrice.toFixed(2)}</span></div>
           <div class="border-t border-mysticGold/10 pt-1.5">
-            <span class="text-gray-500 block">PROPERTIES:</span>
-            <p class="text-gray-300 leading-normal mt-0.5">${item.properties}</p>
+            <span class="text-gray-500 block mb-0.5">PROPERTIES:</span>
+            <p class="text-gray-300 leading-normal">${safeDesc}</p>
           </div>
         </div>
       `;
@@ -1258,18 +1224,18 @@ function updateVaultView() {
     let activeCart = [];
     let discountMultiplier = 1.0;
 
-    function addToCart(name, price, stock) {
-  // Safety check: ensure item is actually available
-  if (stock <= 0) {
-    writeDiagnosticLog(`System Error: Item ${name} is depleted.`);
-    return;
-  }
-  
-  // Existing logic...
-  activeCart.push({ name, price });
-  writeDiagnosticLog(`Registered item to cart: ${name.toUpperCase()} (+$${price.toFixed(2)})`);
-  updateCartDisplay();
-}
+    function addToCart(name, price, stock, weight = 0.3) {
+      // Safety check: ensure item is actually available
+      if (stock <= 0) {
+        writeDiagnosticLog(`System Error: Item ${name} is depleted.`);
+        return;
+      }
+      
+      // We explicitly pass the weight to ensure calculations don't break
+      activeCart.push({ name, price, weight });
+      writeDiagnosticLog(`Registered item to cart: ${name.toUpperCase()} (+£${price.toFixed(2)})`);
+      updateCartDisplay();
+    }
 
     function removeItemFromCart(index) {
       playBeep(260, 0.08, 'sine');
@@ -1281,10 +1247,10 @@ function updateVaultView() {
 
     function addOutfitToCart() {
       let itemsCount = 0;
-      if (studioOutfit.top) { addToCart(studioOutfit.top.name, studioOutfit.top.price, 0.40); itemsCount++; }
-      if (studioOutfit.bottom) { addToCart(studioOutfit.bottom.name, studioOutfit.bottom.price, 0.50); itemsCount++; }
-      if (studioOutfit.cloak) { addToCart(studioOutfit.cloak.name, studioOutfit.cloak.price, 1.00); itemsCount++; }
-      if (studioOutfit.accessory) { addToCart(studioOutfit.accessory.name, studioOutfit.accessory.price, 0.10); itemsCount++; }
+      if (studioOutfit.top) { addToCart(studioOutfit.top.name, studioOutfit.top.price, 10, 0.40); itemsCount++; }
+      if (studioOutfit.bottom) { addToCart(studioOutfit.bottom.name, studioOutfit.bottom.price, 10, 0.50); itemsCount++; }
+      if (studioOutfit.cloak) { addToCart(studioOutfit.cloak.name, studioOutfit.cloak.price, 10, 1.00); itemsCount++; }
+      if (studioOutfit.accessory) { addToCart(studioOutfit.accessory.name, studioOutfit.accessory.price, 10, 0.10); itemsCount++; }
 
       if (itemsCount > 0) {
         clearStudioSelections();
@@ -1328,7 +1294,7 @@ function updateVaultView() {
       if (activeCart.length === 0) {
         container.innerHTML = '<p class="text-gray-500 italic text-center py-10">Basket is empty. Select some clothes or look in the vault!</p>';
         badgeCount.innerText = '0 ITEMS';
-        subtotalEl.innerText = '$0.00';
+        subtotalEl.innerText = '£0.00';
         weightEl.innerText = '0.00 kg';
         return;
       }
@@ -1348,7 +1314,7 @@ function updateVaultView() {
             <span class="text-[9px] text-neonPink uppercase">E-COMMERCE UNIT</span>
           </div>
           <div class="flex items-center gap-3">
-            <span class="text-mysticGold font-mono">$${item.price.toFixed(2)}</span>
+            <span class="text-mysticGold font-mono">£${item.price.toFixed(2)}</span>
             <button onclick="removeItemFromCart(${index})" class="text-red-500 hover:text-red-400 font-bold px-1">[ X ]</button>
           </div>
         `;
@@ -1358,7 +1324,7 @@ function updateVaultView() {
       const finalPrice = subtotal * discountMultiplier;
       
       badgeCount.innerText = `${activeCart.length} ITEMS`;
-      subtotalEl.innerText = `$${finalPrice.toFixed(2)}`;
+      subtotalEl.innerText = `£${finalPrice.toFixed(2)}`;
       weightEl.innerText = `${totalWeight.toFixed(2)} kg`;
     }
 
@@ -1380,10 +1346,10 @@ function updateVaultView() {
             
             <div class="border border-mysticGold/30 p-3 rounded mb-6 text-left text-xs bg-retroDark">
               <span class="text-mysticGold block mb-2 font-bold">Transaction Ledger:</span>
-              ${activeCart.map(i => `<div>- ${i.name} ($${i.price.toFixed(2)})</div>`).join('')}
+              ${activeCart.map(i => `<div>- ${i.name} (£${i.price.toFixed(2)})</div>`).join('')}
               <div class="border-t border-mysticGold/15 mt-2 pt-2 text-neonPink flex justify-between font-bold">
                 <span>ESTIMATED TOTAL:</span>
-                <span>$${(activeCart.reduce((sum, i) => sum + i.price, 0) * discountMultiplier).toFixed(2)}</span>
+                <span>£${(activeCart.reduce((sum, i) => sum + i.price, 0) * discountMultiplier).toFixed(2)}</span>
               </div>
             </div>
             
@@ -1397,15 +1363,12 @@ function updateVaultView() {
     }
 
     window.onload = () => {
-  // 1. Existing init code
-  switchTab('home');
-  writeDiagnosticLog("System Boot Sequence: Completed Successfully");
-  writeDiagnosticLog("Celestial whimsical star overlay active.");
-  writeDiagnosticLog("Portal Mainframe initialized.");
-  
-  // 2. Add this new line to pull the data
-  loadInventory(); 
-};
+      switchTab('home');
+      writeDiagnosticLog("System Boot Sequence: Completed Successfully");
+      writeDiagnosticLog("Celestial whimsical star overlay active.");
+      writeDiagnosticLog("Portal Mainframe initialized.");
+      loadInventory(); 
+    };
   </script>
 
 </body>
