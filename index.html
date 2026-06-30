@@ -1145,10 +1145,12 @@
   const query = document.getElementById('vault-search').value.toLowerCase();
   
   const filtered = allProducts.filter(item => {
-    const itemCat = (item.category || '').toLowerCase().trim();
-    const itemName = (item.name || '').toLowerCase();
+    // 1. Extract the raw data safely
+    const itemCat = (item.category || item.Category || '').toLowerCase().trim();
+    const itemName = (item.name || item.Name || '').toLowerCase();
     
-    const matchesCat = (category === 'all' || itemCat === category);
+    // 2. THE FIX: Use .includes() instead of === for the category
+    const matchesCat = (category === 'all' || itemCat.includes(category));
     const matchesSearch = itemName.includes(query);
     
     return matchesCat && matchesSearch;
