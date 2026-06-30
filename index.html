@@ -454,11 +454,17 @@
           <div class="bg-gradient-to-r from-neonPink to-retroBlack px-4 py-2 flex justify-between items-center text-xs font-mono border-b border-mysticGold/30">
             <span class="font-bold text-white flex items-center gap-1">👜 ALCHEMIST_SHOP.EXE</span>
            <div class="flex flex-wrap gap-1">
-                <button onclick="filterVault('all')" id="filter-all" class="filter-btn px-2 py-0.5 border border-neonPink text-neonPink rounded bg-retroBlack transition-all">ALL</button>
-                <button onclick="filterVault('clothing')" id="filter-clothing" class="filter-btn px-2 py-0.5 border border-mysticGold/30 text-mysticGold rounded hover:border-neonPink transition-all">CLOTHING</button>
-                <button onclick="filterVault('home')" id="filter-home" class="filter-btn px-2 py-0.5 border border-mysticGold/30 text-mysticGold rounded hover:border-neonPink transition-all">HOME</button>
-                <button onclick="filterVault('wellness')" id="filter-wellness" class="filter-btn px-2 py-0.5 border border-mysticGold/30 text-mysticGold rounded hover:border-neonPink transition-all">WELLNESS</button>
-                <button onclick="filterVault('food')" id="filter-food" class="filter-btn px-2 py-0.5 border border-mysticGold/30 text-mysticGold rounded hover:border-neonPink transition-all">FOOD</button>
+
+             <!-- ALL Filter -->
+                <button onclick="filterVault('all'); updateVaultView()" id="filter-all" ...>ALL</button>
+             <!-- Clothing Filter -->
+                <button onclick="filterVault('clothing'); updateVaultView()" id="filter-clothing" ...>CLOTHING</button>
+             <!-- Home Filter -->
+                <button onclick="filterVault('home'); updateVaultView()" id="filter-home" ...>HOME</button>
+             <!-- Wellness & Crystals Filter -->
+               <button onclick="filterVault('wellness'); updateVaultView()" id="filter-wellness" ...>WELLNESS</button>
+             <!-- Food Filter -->
+               <button onclick="filterVault('food'); updateVaultView()" id="filter-food" ...>FOOD</button>
             </div>
             </div>
           </div>
@@ -475,75 +481,14 @@
             </div>
 
             <div class="mb-4 relative font-mono text-xs">
-              <input type="text" id="vault-search" placeholder="Search product file catalog..." oninput="searchVault(this.value)" class="w-full bg-retroBlack border border-mysticGold/30 rounded p-2 pl-8 text-white outline-none focus:border-neonPink transition-colors">
+              <input type="text" id="vault-search" placeholder="Search product file catalog..." oninput="updateVaultView()" class="w-full bg-retroBlack border border-mysticGold/30 rounded p-2 pl-8 text-white outline-none focus:border-neonPink transition-colors">
               <div class="absolute left-2.5 top-2.5">🔍</div>
             </div>
 
             <div id="vault-items-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4 font-mono text-xs">
-              
-              <div class="vault-card border border-mysticGold/30 bg-retroBlack p-3 rounded flex flex-col justify-between hover:border-neonPink transition-colors shadow-sm" data-category="nepalese" data-name="himalayan cedarwood incense">
-                <div class="flex justify-between items-start mb-2">
-                  <div>
-                    <span class="text-[8px] text-neonPink block uppercase">INCENSE // RES01</span>
-                    <h3 class="font-bold text-white text-xs mt-0.5">Himalayan Cedarwood Incense</h3>
-                  </div>
-                  <span class="text-mysticGold font-bold">£18.00</span>
-                </div>
-                <p class="text-[10px] text-gray-400 mb-3">Piney ritual incense rolled responsibly in the valleys of Nepal.</p>
-                <div class="flex gap-1">
-                  <button onclick="addToCart('Himalayan Cedarwood Incense', 18.00)" class="flex-grow bg-retroDark border border-mysticGold/30 text-mysticGold hover:border-neonPink hover:text-neonPink py-1 text-[10px] transition-colors">Acquire Item_</button>
-                  <button onclick="openInspectModal('ins01')" class="px-2 border border-mysticGold/10 text-gray-500 hover:text-mysticGold">[ INSPECT ]</button>
-                </div>
-              </div>
-
-              <div class="vault-card border border-mysticGold/30 bg-retroBlack p-3 rounded flex flex-col justify-between hover:border-neonPink transition-colors shadow-sm" data-category="crystals" data-name="raw citrine cluster">
-                <div class="flex justify-between items-start mb-2">
-                  <div>
-                    <span class="text-[8px] text-neonPink block uppercase">CRYSTALS // CITR9</span>
-                    <h3 class="font-bold text-white text-xs mt-0.5">Raw Citrine Cluster</h3>
-                  </div>
-                  <span class="text-mysticGold font-bold">£32.00</span>
-                </div>
-                <p class="text-[10px] text-gray-400 mb-3">Uncut energetic amplifier aligned with abundance currents.</p>
-                <div class="flex gap-1">
-                  <button onclick="addToCart('Raw Citrine Cluster', 32.00)" class="flex-grow bg-retroDark border border-mysticGold/30 text-mysticGold hover:border-neonPink hover:text-neonPink py-1 text-[10px] transition-colors">Acquire Item_</button>
-                  <button onclick="openInspectModal('cr09')" class="px-2 border border-mysticGold/10 text-gray-500 hover:text-mysticGold">[ INSPECT ]</button>
-                </div>
-              </div>
-
-              <div class="vault-card border border-mysticGold/30 bg-retroBlack p-3 rounded flex flex-col justify-between hover:border-neonPink transition-colors shadow-sm" data-category="crystals" data-name="black obsidian scrying mirror">
-                <div class="flex justify-between items-start mb-2">
-                  <div>
-                    <span class="text-[8px] text-neonPink block uppercase">ALCHEMIC // MIR04</span>
-                    <h3 class="font-bold text-white text-xs mt-0.5">Black Obsidian Scrying Mirror</h3>
-                  </div>
-                  <span class="text-mysticGold font-bold">£45.00</span>
-                </div>
-                <p class="text-[10px] text-gray-400 mb-3">Highly polished dark glass designed for meditation and shadow-work.</p>
-                <div class="flex gap-1">
-                  <button onclick="addToCart('Black Obsidian Mirror', 45.00)" class="flex-grow bg-retroDark border border-mysticGold/30 text-mysticGold hover:border-neonPink hover:text-neonPink py-1 text-[10px] transition-colors">Acquire Item_</button>
-                  <button onclick="openInspectModal('bo04')" class="px-2 border border-mysticGold/10 text-gray-500 hover:text-mysticGold">[ INSPECT ]</button>
-                </div>
-              </div>
-
-              <div class="vault-card border border-mysticGold/30 bg-retroBlack p-3 rounded flex flex-col justify-between hover:border-neonPink transition-colors shadow-sm" data-category="crochet" data-name="amethyst knit wrap shrug">
-                <div class="flex justify-between items-start mb-2">
-                  <div>
-                    <span class="text-[8px] text-neonPink block uppercase">CROCHET // CC02</span>
-                    <h3 class="font-bold text-white text-xs mt-0.5">Amethyst Knit Wrap Shrug</h3>
-                  </div>
-                  <span class="text-mysticGold font-bold">£78.00</span>
-                </div>
-                <p class="text-[10px] text-gray-400 mb-3">Custom crochet knitwear pieces with real amethyst stones sewn in.</p>
-                <div class="flex gap-1">
-                  <button onclick="addToCart('Amethyst Knit Wrap Shrug', 78.00)" class="flex-grow bg-retroDark border border-mysticGold/30 text-mysticGold hover:border-neonPink hover:text-neonPink py-1 text-[10px] transition-colors">Acquire Item_</button>
-                  <button onclick="openInspectModal('cc02')" class="px-2 border border-mysticGold/10 text-gray-500 hover:text-mysticGold">[ INSPECT ]</button>
-                </div>
-              </div>
-
+            
+            
             </div>
-          </div>
-        </div>
 
         <!-- TAB 04_COORDINATES (Contact / Guestbook Window) -->
         <div id="tab-coordinates" class="tab-pane hidden bg-retroDark/95 rounded relative overflow-hidden border border-mysticGold/20">
@@ -696,13 +641,76 @@
   </div>
 
   <script>
+  let allProducts = []; // Stores the full inventory from your sheet
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxAb6x89hRpzs280fY7mHA3Ylka0FT2vnPFYwMlAEKJLZQcl-olDDQg_p9iv7J8cJ9TlA/exec"; // Your published Google Script URL
+    
     let audioCtx = null;
     let jukeboxSource = null; 
     let jukeboxGainNode = null;
     let activeTrackType = null; 
     let lullabyInterval = null;
     let chordIndex = 0;
+    
+async function loadInventory() {
+  try {
+    writeDiagnosticLog("Fetching inventory from external source...");
+    const response = await fetch(WEB_APP_URL);
+    allProducts = await response.json(); 
+    renderVault(allProducts);
+    writeDiagnosticLog(`Successfully ingested ${allProducts.length} items.`);
+  } catch (error) {
+    writeDiagnosticLog("Error: Could not retrieve inventory.");
+    console.error(error);
+  }
+}
 
+function renderVault(data) {
+  const container = document.getElementById('vault-items-grid');
+  container.innerHTML = ''; 
+
+  data.forEach(item => {
+    // 1. Calculate stock status
+    const isOutOfStock = item.stock <= 0;
+    
+    container.innerHTML += `
+      <div class="vault-card border border-mysticGold/30 bg-retroBlack p-3 rounded flex flex-col justify-between hover:border-neonPink transition-colors shadow-sm" 
+           data-category="${item.category}" 
+           data-name="${item.name.toLowerCase()}">
+        
+        <div class="w-full h-48 mb-3 overflow-hidden rounded border border-mysticGold/20 bg-retroDark">
+          <img src="${item.imgURL}" 
+               alt="${item.name}" 
+               class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+               onerror="this.onerror=null; this.src='https://via.placeholder.com/300?text=Orb+Loading...';">
+        </div>
+
+        <div class="flex justify-between items-start mb-2">
+          <div>
+            <span class="text-[8px] text-neonPink block uppercase">${item.sku || 'ITEM'}</span>
+            <h3 class="font-bold text-white text-xs mt-0.5">${item.name}</h3>
+          </div>
+          <span class="text-mysticGold font-bold">£${item.price}</span>
+        </div>
+
+        <div class="mb-3 text-[9px] font-mono">
+            ${isOutOfStock 
+              ? '<span class="text-red-500 font-bold">[ OUT OF STOCK ]</span>' 
+              : `<span class="text-forestGreen">[ ${item.stock} IN STOCK ]</span>`}
+        </div>
+
+        <p class="text-[10px] text-gray-400 mb-3">${item.description}</p>
+        
+        <div class="flex gap-1">
+          <button ${isOutOfStock ? 'disabled class="flex-grow bg-retroBlack border border-gray-700 text-gray-600 py-1 text-[10px] cursor-not-allowed opacity-50"' : `onclick="addToCart('${item.name}', ${item.price}, ${item.stock})" class="flex-grow bg-retroDark border border-mysticGold/30 text-mysticGold hover:border-neonPink hover:text-neonPink py-1 text-[10px] transition-colors"`}>
+            ${isOutOfStock ? 'UNAVAILABLE' : 'Acquire_'}
+          </button>
+          <button onclick="openInspectModal('${item.id}')" class="px-2 border border-mysticGold/10 text-gray-500 hover:text-mysticGold">[ INSPECT ]</button>
+        </div>
+      </div>
+    `;
+  });
+}
+    
     function initAudio() {
       if (!audioCtx) {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -1104,6 +1112,28 @@
       document.getElementById('studio-valuation-badge').innerText = `$${sumVal.toFixed(2)}`;
     }
 
+    // Helper to determine which category is currently selected
+function getActiveCategory() {
+  const activeBtn = document.querySelector('.filter-btn.border-neonPink');
+  // Returns the category name (e.g., 'clothing') based on the button ID
+  return activeBtn ? activeBtn.id.replace('filter-', '') : 'all';
+}
+
+// Your refined update function
+function updateVaultView() {
+  const category = getActiveCategory();
+  const query = document.getElementById('vault-search').value.toLowerCase();
+  
+  const filtered = allProducts.filter(item => {
+    // Ensure case-insensitive category matching (handling 'all' as a wildcard)
+    const matchesCat = (category === 'all' || item.category === category);
+    const matchesSearch = item.name.toLowerCase().includes(query);
+    return matchesCat && matchesSearch;
+  });
+  
+  renderVault(filtered);
+}
+    
     function filterVault(category) {
   playBeep(420, 0.04, 'sine');
   
@@ -1224,12 +1254,18 @@
     let activeCart = [];
     let discountMultiplier = 1.0;
 
-    function addToCart(name, price, weight = 0.30) {
-      playBeep(540, 0.05, 'sine');
-      activeCart.push({ name, price, weight });
-      writeDiagnosticLog(`Registered item to cart: ${name.toUpperCase()} (+$${price.toFixed(2)})`);
-      updateCartDisplay();
-    }
+    function addToCart(name, price, stock) {
+  // Safety check: ensure item is actually available
+  if (stock <= 0) {
+    writeDiagnosticLog(`System Error: Item ${name} is depleted.`);
+    return;
+  }
+  
+  // Existing logic...
+  activeCart.push({ name, price });
+  writeDiagnosticLog(`Registered item to cart: ${name.toUpperCase()} (+$${price.toFixed(2)})`);
+  updateCartDisplay();
+}
 
     function removeItemFromCart(index) {
       playBeep(260, 0.08, 'sine');
@@ -1357,12 +1393,15 @@
     }
 
     window.onload = () => {
-      // Ensure the portal is the first thing users see
-      switchTab('home');
-      writeDiagnosticLog("System Boot Sequence: Completed Successfully");
-      writeDiagnosticLog("Celestial whimsical star overlay active.");
-      writeDiagnosticLog("Portal Mainframe initialized.");
-    };
+  // 1. Existing init code
+  switchTab('home');
+  writeDiagnosticLog("System Boot Sequence: Completed Successfully");
+  writeDiagnosticLog("Celestial whimsical star overlay active.");
+  writeDiagnosticLog("Portal Mainframe initialized.");
+  
+  // 2. Add this new line to pull the data
+  loadInventory(); 
+};
   </script>
 
 </body>
