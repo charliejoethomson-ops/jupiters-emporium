@@ -96,8 +96,8 @@
       transition: height 0.1s ease-in-out;
     }
 
-    /* Active Nav Tab Style */
-    .nav-active {
+    /* Active  Tab Style */
+    .-active {
       border-bottom: 2px solid #ff007f !important;
       color: #ff007f !important;
       background: linear-gradient(to top, rgba(255,0,127,0.1), transparent) !important;
@@ -195,20 +195,20 @@
       </div>
     </header>
 
-    <nav class="sticky top-2 z-40 bg-retroBlack/90 backdrop-blur-md border border-mysticGold/40 rounded shadow-[0_8px_30px_rgba(0,0,0,0.6)] mb-8 px-2 py-2 flex justify-center gap-2 md:gap-6 font-mono text-xs md:text-sm overflow-x-auto">
-      <button onclick="switchTab('home')" id="nav-home" class="nav-btn nav-active px-4 py-2 border-b-2 border-transparent text-mysticGold hover:text-neonPink hover:border-neonPink transition-all uppercase tracking-widest font-bold whitespace-nowrap">
+    <nav class="sticky top-2 z-40 bg-retroBlack/90 backdrop-blur-md border border-mysticGold/40 rounded shadow-[0_8px_30px_rgba(0,0,0,0.6)] mb-8 px-2 py-3 flex flex-wrap justify-center gap-x-2 gap-y-2 md:gap-6 font-mono text-[10px] sm:text-xs md:text-sm">
+      <button onclick="switchTab('home')" id="nav-home" class="nav-btn nav-active px-2 sm:px-4 py-1.5 sm:py-2 border-b-2 border-transparent text-mysticGold hover:text-neonPink hover:border-neonPink transition-all uppercase tracking-widest font-bold whitespace-nowrap">
         [ THE_PORTAL ]
       </button>
-      <button onclick="switchTab('shop')" id="nav-shop" class="nav-btn px-4 py-2 border-b-2 border-transparent text-mysticGold hover:text-neonPink hover:border-neonPink transition-all uppercase tracking-widest font-bold whitespace-nowrap">
+      <button onclick="switchTab('shop')" id="nav-shop" class="nav-btn px-2 sm:px-4 py-1.5 sm:py-2 border-b-2 border-transparent text-mysticGold hover:text-neonPink hover:border-neonPink transition-all uppercase tracking-widest font-bold whitespace-nowrap">
         [ THE_VAULT ]
       </button>
-      <button onclick="switchTab('studio')" id="nav-studio" class="nav-btn px-4 py-2 border-b-2 border-transparent text-mysticGold hover:text-neonPink hover:border-neonPink transition-all uppercase tracking-widest font-bold whitespace-nowrap">
+      <button onclick="switchTab('studio')" id="nav-studio" class="nav-btn px-2 sm:px-4 py-1.5 sm:py-2 border-b-2 border-transparent text-mysticGold hover:text-neonPink hover:border-neonPink transition-all uppercase tracking-widest font-bold whitespace-nowrap">
         [ LOOKBOOK_STUDIO ]
       </button>
-      <button onclick="switchTab('terminal')" id="nav-terminal" class="nav-btn px-4 py-2 border-b-2 border-transparent text-mysticGold hover:text-neonPink hover:border-neonPink transition-all uppercase tracking-widest font-bold whitespace-nowrap">
+      <button onclick="switchTab('terminal')" id="nav-terminal" class="nav-btn px-2 sm:px-4 py-1.5 sm:py-2 border-b-2 border-transparent text-mysticGold hover:text-neonPink hover:border-neonPink transition-all uppercase tracking-widest font-bold whitespace-nowrap">
         [ ABOUT_JAYME ]
       </button>
-      <button onclick="switchTab('coordinates')" id="nav-coordinates" class="nav-btn px-4 py-2 border-b-2 border-transparent text-mysticGold hover:text-neonPink hover:border-neonPink transition-all uppercase tracking-widest font-bold whitespace-nowrap">
+      <button onclick="switchTab('coordinates')" id="nav-coordinates" class="nav-btn px-2 sm:px-4 py-1.5 sm:py-2 border-b-2 border-transparent text-mysticGold hover:text-neonPink hover:border-neonPink transition-all uppercase tracking-widest font-bold whitespace-nowrap">
         [ GUESTBOOK ]
       </button>
     </nav>
@@ -630,7 +630,14 @@
 
     </main>
 
+    <!-- FOOTER: Retro 88x31 Badges -->
     <footer class="mt-12 border-t border-mysticGold/20 pt-6 flex flex-col items-center gap-6">
+      
+      <!-- Back to Top Anchor -->
+      <button onclick="window.scrollTo({ top: 0, behavior: 'smooth' }); playBeep(450, 0.05, 'triangle');" class="border border-neonPink bg-retroBlack/50 text-neonPink hover:bg-neonPink hover:text-white px-6 py-2 text-[10px] font-mono uppercase tracking-widest rounded shadow-[0_0_8px_rgba(255,0,127,0.3)] transition-all">
+        ↑ INITIATE_UPLINK (TOP) ↑
+      </button>
+
       <div class="flex flex-wrap justify-center gap-2">
         <div class="border border-mysticGold bg-gradient-to-r from-retroBlack to-retroDark px-2 py-1 text-[9px] font-mono text-mysticGold uppercase tracking-widest rounded flex items-center gap-1.5 shadow-[0_0_6px_rgba(204,164,26,0.2)]"><span>🪐</span> JUPITER ALIGNED</div>
         <div class="border border-neonPink bg-gradient-to-r from-retroBlack to-retroDark px-2 py-1 text-[9px] font-mono text-neonPink uppercase tracking-widest rounded flex items-center gap-1.5 shadow-[0_0_6px_rgba(255,0,127,0.2)]"><span>🧶</span> JAYME CREATED</div>
@@ -646,7 +653,6 @@
         </div>
       </div>
     </footer>
-
   </div>
 
   <button onclick="scrollToCart()" class="floating-cart group">
